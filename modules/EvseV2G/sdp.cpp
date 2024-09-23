@@ -22,7 +22,7 @@
 #define DEBUG 1
 
 /* defines for V2G SDP implementation */
-#define SDP_SRV_PORT 15118
+#define SDP_SRV_PORT 15120 //Changed by MS 
 
 #define SDP_VERSION         0x01
 #define SDP_INVERSE_VERSION 0xfe
