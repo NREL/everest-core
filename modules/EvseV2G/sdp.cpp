@@ -22,17 +22,27 @@
 #define DEBUG 1
 
 /* defines for V2G SDP implementation */
-#define SDP_SRV_PORT 15120 //Changed by MS 
+#define SDP_SRV_PORT 15118 // Regular port defined in DIN SPEC 70121 [V2G-DC-159] and ISO 15118-02 [V2G2-125/205] for SDP Server
+#define ESDP_SRV_PORT 15200 // As per [V2G200-51-1/2] in ISO/PAS CD 15118-200:2024 - STANDARD NOT YET PUBLISHED
 
 #define SDP_VERSION         0x01
 #define SDP_INVERSE_VERSION 0xfe
 
-#define SDP_HEADER_LEN           8
+#define SDP_HEADER_LEN           8 // Header length is the same for SDP and ESDP as per [V2G200-4-1] in ISO/PAS CD 15118-200:2024
 #define SDP_REQUEST_PAYLOAD_LEN  2
 #define SDP_RESPONSE_PAYLOAD_LEN 20
 
+// Define ESDP Req & Res payload lengths for ESDP (Same as SDP for now)
+#define ESDP_REQUEST_PAYLOAD_LEN 2
+#define ESDP_RESPONSE_PAYLOAD_LEN 20
+
+// Assign regular SDP Payload types as per DIN 70121 [V2G2-DC-194/208] & ISO 15118-02 [V2G2-140/152]
 #define SDP_REQUEST_TYPE  0x9000
 #define SDP_RESPONSE_TYPE 0x9001
+
+// Assign ESDP Payload types as per [V2G200-41-1] in ISO/PAS CD 15118-20:2024 - STANDARD NOT YET PUBLISHED
+#define ESDP_REQUEST_TYPE  0x2000 
+#define ESDP_RESPONSE_TYPE 0x2000
 
 #define POLL_TIMEOUT 20
 
@@ -61,7 +71,8 @@ struct sdp_query {
 };
 
 /*
- * Fills the SDP header into a given buffer
+ * Fills the SDP header into a given buffer. Same function for both SDP and ESDP
+ * since the header length is the same for both
  */
 static int sdp_write_header(uint8_t* buffer, uint16_t payload_type, uint32_t payload_len) {
     int offset = 0;
@@ -110,6 +121,12 @@ static int sdp_validate_header(uint8_t* buffer, uint16_t expected_payload_type, 
         return -1;
     }
 
+    /* If received packet is ESDPRequest, validate ESDP version as per [V2G200--] in ISO/PAS CD 15118-200:2024
+    Added for ESDP */
+//    if (payload_type == ESDP_REQUEST_TYPE) {
+//    	
+//    }
+
     return 0;
 }
 
@@ -131,6 +148,31 @@ int sdp_create_response(uint8_t* buffer, struct sockaddr_in6* addr, enum sdp_sec
 
     /* now fill in the header with payload length */
     sdp_write_header(buffer, SDP_RESPONSE_TYPE, offset - SDP_HEADER_LEN);
+
+    return offset;
+}
+
+/* Create response packet for ESDP.
+ Duplicated the original sdp_create_response function since payload for
+ ESDP Response has additional elements compared to regular SDP Response */
+int esdp_create_response(uint8_t* buffer_esdp, struct sockaddr_in6* addr, enum sdp_security security,
+                        enum sdp_transport_protocol proto) {
+    int offset = SDP_HEADER_LEN; // Header length is same for both SDP and ESDP
+
+    /* fill in first the payload */
+
+    /* address is already network byte order */
+    memcpy(&buffer_esdp[offset], &addr->sin6_addr, sizeof(addr->sin6_addr));
+    offset += sizeof(addr->sin6_addr);
+
+    memcpy(&buffer_esdp[offset], &addr->sin6_port, sizeof(addr->sin6_port));
+    offset += sizeof(addr->sin6_port);
+
+    buffer_esdp[offset++] = security;
+    buffer_esdp[offset++] = proto;
+
+    /* now fill in the header with payload length */
+    sdp_write_header(buffer_esdp, ESDP_RESPONSE_TYPE, offset - SDP_HEADER_LEN);
 
     return offset;
 }
@@ -209,8 +251,83 @@ int sdp_send_response(int sdp_socket, struct sdp_query* sdp_query) {
     return rv;
 }
 
+/*
+ * Sends a response packet for ESDP
+ */
+int esdp_send_response(int esdp_socket, struct sdp_query* sdp_query) {
+    uint8_t buffer_esdp[SDP_HEADER_LEN + ESDP_RESPONSE_PAYLOAD_LEN];
+    int rv = 0;
+
+    /* at the moment we only understand TCP protocol */
+    if (sdp_query->proto_requested != SDP_TRANSPORT_PROTOCOL_TCP) {
+        dlog(DLOG_LEVEL_ERROR, "SDP requested unsupported protocol 0x%02x for ESDP, announcing nothing",
+             sdp_query->proto_requested);
+        return 1;
+    }
+
+    switch (sdp_query->security_requested) {
+    case SDP_SECURITY_TLS:
+        if (sdp_query->v2g_ctx->local_tls_addr) {
+            dlog(DLOG_LEVEL_INFO, "SDP requested TLS for ESDP, announcing TLS");
+            esdp_create_response(buffer_esdp, sdp_query->v2g_ctx->local_tls_addr, SDP_SECURITY_TLS,
+                                SDP_TRANSPORT_PROTOCOL_TCP);
+            break;
+        }
+        if (sdp_query->v2g_ctx->local_tcp_addr) {
+            dlog(DLOG_LEVEL_INFO, "SDP requested TLS for ESDP, announcing NO-TLS");
+            esdp_create_response(buffer_esdp, sdp_query->v2g_ctx->local_tcp_addr, SDP_SECURITY_NONE,
+                                SDP_TRANSPORT_PROTOCOL_TCP);
+            break;
+        }
+        dlog(DLOG_LEVEL_ERROR, "SDP requested TLS for ESDP, announcing nothing");
+        return 1;
+
+    case SDP_SECURITY_NONE:
+        if (sdp_query->v2g_ctx->local_tcp_addr) {
+            dlog(DLOG_LEVEL_INFO, "SDP requested NO-TLS for ESDP, announcing NO-TLS");
+            esdp_create_response(buffer_esdp, sdp_query->v2g_ctx->local_tcp_addr, SDP_SECURITY_NONE,
+                                SDP_TRANSPORT_PROTOCOL_TCP);
+            break;
+        }
+        if (sdp_query->v2g_ctx->local_tls_addr) {
+            dlog(DLOG_LEVEL_INFO, "SDP requested NO-TLS for ESDP, announcing TLS");
+            esdp_create_response(buffer_esdp, sdp_query->v2g_ctx->local_tls_addr, SDP_SECURITY_TLS,
+                                SDP_TRANSPORT_PROTOCOL_TCP);
+            break;
+        }
+        dlog(DLOG_LEVEL_ERROR, "SDP requested NO-TLS for ESDP, announcing nothing");
+        return 1;
+
+    default:
+        dlog(DLOG_LEVEL_ERROR, "SDP requested unsupported security 0x%02x for ESDP, announcing nothing",
+             sdp_query->security_requested);
+        return 1;
+    }
+
+    if (sendto(esdp_socket, buffer_esdp, sizeof(buffer_esdp), 0, (struct sockaddr*)&sdp_query->remote_addr,
+               sizeof(struct sockaddr_in6)) != sizeof(buffer_esdp)) {
+        rv = -1;
+    }
+    if (DEBUG) {
+        char addrbuf[INET6_ADDRSTRLEN] = {0};
+        const char* addr;
+        int saved_errno = errno;
+
+        addr = inet_ntop(AF_INET6, &sdp_query->remote_addr.sin6_addr, addrbuf, sizeof(addrbuf));
+        if (rv == 0) {
+            dlog(DLOG_LEVEL_INFO, "sendto([%s]:%" PRIu16 ") succeeded for ESDP", addr, ntohs(sdp_query->remote_addr.sin6_port));
+        } else {
+            dlog(DLOG_LEVEL_ERROR, "sendto([%s]:%" PRIu16 ") failed: %s for ESDP", addr, ntohs(sdp_query->remote_addr.sin6_port),
+                 strerror(saved_errno));
+        }
+    }
+
+    return rv;
+}
+
 int sdp_init(struct v2g_context* v2g_ctx) {
     struct sockaddr_in6 sdp_addr = {AF_INET6, htons(SDP_SRV_PORT)};
+    struct sockaddr_in6 esdp_addr = {AF_INET6, htons(ESDP_SRV_PORT)}; // For ESDP
     struct ipv6_mreq mreq = {{IN6ADDR_ALLNODES}, 0};
     int enable = 1;
 
@@ -226,22 +343,45 @@ int sdp_init(struct v2g_context* v2g_ctx) {
         dlog(DLOG_LEVEL_ERROR, "socket() failed: %s", strerror(errno));
         return -1;
     }
+    
+    /* create receiving esdp socket for ESDP*/
+    v2g_ctx->esdp_socket = socket(AF_INET6, SOCK_DGRAM, IPPROTO_UDP);
+    if (v2g_ctx->esdp_socket == -1) {
+        dlog(DLOG_LEVEL_ERROR, "socket() failed for ESDP: %s", strerror(errno));
+        return -1;
+    }    
 
     if (setsockopt(v2g_ctx->sdp_socket, SOL_SOCKET, SO_REUSEPORT, &enable, sizeof(enable)) == -1) {
         dlog(DLOG_LEVEL_ERROR, "setsockopt(SO_REUSEPORT) failed: %s", strerror(errno));
         close(v2g_ctx->sdp_socket);
         return -1;
     }
-
+    
+    /* enable the Option "SO_REUSEPORT" for ESDP socket */
+    if (setsockopt(v2g_ctx->esdp_socket, SOL_SOCKET, SO_REUSEPORT, &enable, sizeof(enable)) == -1) {
+        dlog(DLOG_LEVEL_ERROR, "setsockopt(SO_REUSEPORT) failed for ESDP: %s", strerror(errno));
+        close(v2g_ctx->esdp_socket);
+        return -1;
+    }
+    
     sdp_addr.sin6_addr = in6addr_any;
+    esdp_addr.sin6_addr = in6addr_any; // For ESDP
 
     if (bind(v2g_ctx->sdp_socket, (struct sockaddr*)&sdp_addr, sizeof(sdp_addr)) == -1) {
         dlog(DLOG_LEVEL_ERROR, "bind() failed: %s", strerror(errno));
         close(v2g_ctx->sdp_socket);
         return -1;
     }
-
+    
+    /* bind esdp_socket to esdp_addr for ESDP */
+    if (bind(v2g_ctx->esdp_socket, (struct sockaddr*)&esdp_addr, sizeof(esdp_addr)) == -1) {
+        dlog(DLOG_LEVEL_ERROR, "bind() failed for ESDP socket: %s", strerror(errno));
+        close(v2g_ctx->esdp_socket);
+        return -1;
+    }
+    
     dlog(DLOG_LEVEL_INFO, "SDP socket setup succeeded");
+    dlog(DLOG_LEVEL_INFO, "ESDP socket setup succeeded"); // For ESDP
 
     /* bind only to specified device */
     if (setsockopt(v2g_ctx->sdp_socket, SOL_SOCKET, SO_BINDTODEVICE, v2g_ctx->if_name, strlen(v2g_ctx->if_name)) ==
@@ -251,7 +391,16 @@ int sdp_init(struct v2g_context* v2g_ctx) {
         return -1;
     }
 
+    /* bind ESDP socket only to specified device for ESDP */
+    if (setsockopt(v2g_ctx->esdp_socket, SOL_SOCKET, SO_BINDTODEVICE, v2g_ctx->if_name, strlen(v2g_ctx->if_name)) ==
+        -1) {
+        dlog(DLOG_LEVEL_ERROR, "setsockopt(SO_BINDTODEVICE) failed for ESDP: %s", strerror(errno));
+        close(v2g_ctx->esdp_socket);
+        return -1;
+    }
+
     dlog(DLOG_LEVEL_TRACE, "bind only to specified device");
+    dlog(DLOG_LEVEL_TRACE, "bind only to specified device for ESDP");
 
     /* join multicast group */
     if (setsockopt(v2g_ctx->sdp_socket, IPPROTO_IPV6, IPV6_JOIN_GROUP, &mreq, sizeof(mreq)) == -1) {
@@ -260,7 +409,15 @@ int sdp_init(struct v2g_context* v2g_ctx) {
         return -1;
     }
 
+    /* join multicast group for ESDP socket */
+    if (setsockopt(v2g_ctx->esdp_socket, IPPROTO_IPV6, IPV6_JOIN_GROUP, &mreq, sizeof(mreq)) == -1) {
+        dlog(DLOG_LEVEL_ERROR, "setsockopt(IPV6_JOIN_GROUP) failed for ESDP: %s", strerror(errno));
+        close(v2g_ctx->esdp_socket);
+        return -1;
+    }
+
     dlog(DLOG_LEVEL_TRACE, "joined multicast group");
+    dlog(DLOG_LEVEL_TRACE, "joined multicast group for ESDP");
 
     return 0;
 }
@@ -269,8 +426,12 @@ int sdp_listen(struct v2g_context* v2g_ctx) {
     /* Init pollfd struct */
     struct pollfd pollfd = {v2g_ctx->sdp_socket, POLLIN, 0};
 
+    /* Init pollfd struct for ESDP socket */
+    struct pollfd pollfd_esdp = {v2g_ctx->esdp_socket, POLLIN, 0};
+
     while (!v2g_ctx->shutdown) {
         uint8_t buffer[SDP_HEADER_LEN + SDP_REQUEST_PAYLOAD_LEN];
+        uint8_t buffer_esdp[SDP_HEADER_LEN + ESDP_REQUEST_PAYLOAD_LEN]; // For ESDP
         char addrbuf[INET6_ADDRSTRLEN] = {0};
         const char* addr = addrbuf;
         struct sdp_query sdp_query = {
@@ -321,10 +482,59 @@ int sdp_listen(struct v2g_context* v2g_ctx) {
 
             sdp_send_response(v2g_ctx->sdp_socket, &sdp_query);
         }
+        
+        /* Check if data was received on esdp socket for ESDP */
+        signed status_esdp = poll(&pollfd_esdp, 1, POLL_TIMEOUT);
+        
+        // If the call did not succeed because it was interrupted for ESDP
+        if (status_esdp == -1) {
+            if (errno == EINTR) {
+                continue;
+            } else {
+                dlog(DLOG_LEVEL_ERROR, "poll() failed for ESDP: %s", strerror(errno));
+                continue;
+            }
+        }
+        /* If new data was received, handle esdp request for ESDP */
+        if (status_esdp > 0) {
+            ssize_t len = recvfrom(v2g_ctx->esdp_socket, buffer_esdp, sizeof(buffer_esdp), 0,
+                                   (struct sockaddr*)&sdp_query.remote_addr, &addrlen);
+            if (len == -1) {
+                if (errno != EINTR)
+                    dlog(DLOG_LEVEL_ERROR, "recvfrom() failed for ESDP: %s", strerror(errno));
+                continue;
+            }
+
+            addr = inet_ntop(AF_INET6, &sdp_query.remote_addr.sin6_addr, addrbuf, sizeof(addrbuf));
+
+            if (len != sizeof(buffer_esdp)) {
+                dlog(DLOG_LEVEL_WARNING, "Discarded packet from [%s] for ESDP:%" PRIu16 " due to unexpected length %zd", addr,
+                     ntohs(sdp_query.remote_addr.sin6_port), len);
+                continue;
+            }
+
+            if (sdp_validate_header(buffer_esdp, ESDP_REQUEST_TYPE, ESDP_REQUEST_PAYLOAD_LEN)) {
+                dlog(DLOG_LEVEL_WARNING, "Packet with invalid SDP header for ESDP received from [%s]:%" PRIu16, addr,
+                     ntohs(sdp_query.remote_addr.sin6_port));
+                continue;
+            }
+
+            sdp_query.security_requested = (sdp_security)buffer_esdp[SDP_HEADER_LEN + 0];
+            sdp_query.proto_requested = (sdp_transport_protocol)buffer_esdp[SDP_HEADER_LEN + 1];
+
+            dlog(DLOG_LEVEL_INFO, "Received ESDP packet from [%s]:%" PRIu16 " with security 0x%02x and protocol 0x%02x",
+                 addr, ntohs(sdp_query.remote_addr.sin6_port), sdp_query.security_requested, sdp_query.proto_requested);
+
+            esdp_send_response(v2g_ctx->esdp_socket, &sdp_query);
+        }
     }
 
     if (close(v2g_ctx->sdp_socket) == -1) {
         dlog(DLOG_LEVEL_ERROR, "close() failed: %s", strerror(errno));
+    }
+
+    if (close(v2g_ctx->esdp_socket) == -1) {
+        dlog(DLOG_LEVEL_ERROR, "close() failed for ESDP socket: %s", strerror(errno));
     }
 
     return 0;

@@ -207,6 +207,7 @@ struct v2g_context {
     enum tls_security_level tls_security;
 
     int sdp_socket;
+    int esdp_socket; // Added for ESDP.
     int tcp_socket;
 
     int udp_port;
