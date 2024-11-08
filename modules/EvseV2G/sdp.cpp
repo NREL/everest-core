@@ -23,26 +23,32 @@
 
 /* defines for V2G SDP implementation */
 #define SDP_SRV_PORT 15118 // Regular port defined in DIN SPEC 70121 [V2G-DC-159] and ISO 15118-02 [V2G2-125/205] for SDP Server
-#define ESDP_SRV_PORT 15200 // As per [V2G200-51-1/2] in ISO/PAS CD 15118-200:2024 - STANDARD NOT YET PUBLISHED
+#define ESDP_SRV_PORT 15200 // As per [V2G200-51-1/2] in ISO/PAS CD 15118-200:2024(E) - STANDARD NOT YET PUBLISHED
 
 #define SDP_VERSION         0x01
 #define SDP_INVERSE_VERSION 0xfe
 
-#define SDP_HEADER_LEN           8 // Header length is the same for SDP and ESDP as per [V2G200-4-1] in ISO/PAS CD 15118-200:2024
+#define SDP_HEADER_LEN           8 // Header length is the same for SDP and ESDP as per [V2G200-4-1] in ISO/PAS CD 15118-200:2024(E)
 #define SDP_REQUEST_PAYLOAD_LEN  2
 #define SDP_RESPONSE_PAYLOAD_LEN 20
 
-// Define ESDP Req & Res payload lengths for ESDP (Same as SDP for now)
-#define ESDP_REQUEST_PAYLOAD_LEN 2
-#define ESDP_RESPONSE_PAYLOAD_LEN 20
+// Define ESDP Req & Res payload lengths for ESDP (Subject to change)
+#define ESDP_REQUEST_PAYLOAD_LEN 20
+#define ESDP_RESPONSE_PAYLOAD_LEN 24
 
 // Assign regular SDP Payload types as per DIN 70121 [V2G2-DC-194/208] & ISO 15118-02 [V2G2-140/152]
 #define SDP_REQUEST_TYPE  0x9000
 #define SDP_RESPONSE_TYPE 0x9001
 
-// Assign ESDP Payload types as per [V2G200-41-1] in ISO/PAS CD 15118-20:2024 - STANDARD NOT YET PUBLISHED
+// Assign ESDP Payload types as per [V2G200-41-1] in ISO/PAS CD 15118-200:2024(E) - STANDARD NOT YET PUBLISHED
 #define ESDP_REQUEST_TYPE  0x2000 
 #define ESDP_RESPONSE_TYPE 0x2000
+
+// Define ESDP Version for verification as per [V2G200-52-2] in ISO/PAS CD 15118-200:2024(E)
+#define ESDP_VERSION        0x0100
+
+// Define Maximum V2GTP Paylod Size as per [V2G200-52-3] in ISO/PAS CD 15118-200:2024(E)
+#define ESDP_MAX_V2GTP_PAYLOAD_SIZE 0x1000
 
 #define POLL_TIMEOUT 20
 
@@ -121,12 +127,49 @@ static int sdp_validate_header(uint8_t* buffer, uint16_t expected_payload_type, 
         return -1;
     }
 
-    /* If received packet is ESDPRequest, validate ESDP version as per [V2G200--] in ISO/PAS CD 15118-200:2024
-    Added for ESDP */
-//    if (payload_type == ESDP_REQUEST_TYPE) {
-//    	
-//    }
+    return 0;
+}
 
+static int esdp_validate_header(uint8_t* buffer, uint16_t expected_payload_type, uint32_t expected_payload_len, uint16_t expected_esdp_version) {
+    /* Returns -1 for invalid V2GTP header, 1 for invalid ESDP Header (version, max payload size), and 0 otherwise*/
+
+    uint16_t payload_type;
+    uint32_t payload_len;
+    uint16_t esdp_version;
+
+    if (buffer[0] != SDP_VERSION) {
+        dlog(DLOG_LEVEL_ERROR, "Invalid SDP version in header of ESDP packet");
+        return -1;
+    }
+
+    if (buffer[1] != SDP_INVERSE_VERSION) {
+        dlog(DLOG_LEVEL_ERROR, "Invalid SDP inverse version in header of ESDP packet");
+        return -1;
+    }
+
+    payload_type = (buffer[2] << 8) + buffer[3];
+    if (payload_type != expected_payload_type) {
+        dlog(DLOG_LEVEL_ERROR, "Invalid payload type: expected %" PRIu16 ", received %" PRIu16 " in header of ESDP packet",
+             expected_payload_type, payload_type);
+        return -1;
+    }
+
+//    payload_len = (buffer[4] << 24) + (buffer[5] << 16) + (buffer[6] << 8) + buffer[7];
+//    if (payload_len != expected_payload_len) {
+//        dlog(DLOG_LEVEL_ERROR, "Invalid payload length: expected %" PRIu32 ", received %" PRIu32, expected_payload_len,
+//             payload_len);
+//        return -1;
+//    }
+    
+    /* Verify ESDP version as per [V2G200-52-2] in ISO/PAS CD 15118-200:2024(E). Added for ESDP */
+    esdp_version = (buffer[8] << 8) + buffer[9];    
+    if (esdp_version != expected_esdp_version) {
+    	dlog(DLOG_LEVEL_ERROR, "Unsupported ESDP Version: expected %" PRIu16 ", received %" PRIu16 " in ESDP Payload",
+    	     expected_esdp_version, esdp_version);
+     	dlog(DLOG_LEVEL_ERROR, "The last ESDP packet will be discarded since the ESDP version is unsupported");
+     	return 1;
+    }
+    
     return 0;
 }
 
@@ -158,8 +201,14 @@ int sdp_create_response(uint8_t* buffer, struct sockaddr_in6* addr, enum sdp_sec
 int esdp_create_response(uint8_t* buffer_esdp, struct sockaddr_in6* addr, enum sdp_security security,
                         enum sdp_transport_protocol proto) {
     int offset = SDP_HEADER_LEN; // Header length is same for both SDP and ESDP
-
-    /* fill in first the payload */
+    
+    // Write ESDP Version
+    buffer_esdp[offset++] = (ESDP_VERSION >> 8) & 0xff;
+    buffer_esdp[offset++] = ESDP_VERSION & 0xff;
+    
+    // Write Max V2GTP Payload Size
+    buffer_esdp[offset++] = (ESDP_MAX_V2GTP_PAYLOAD_SIZE >> 8) & 0xff;
+    buffer_esdp[offset++] = ESDP_MAX_V2GTP_PAYLOAD_SIZE & 0xff;
 
     /* address is already network byte order */
     memcpy(&buffer_esdp[offset], &addr->sin6_addr, sizeof(addr->sin6_addr));
@@ -438,6 +487,7 @@ int sdp_listen(struct v2g_context* v2g_ctx) {
             .v2g_ctx = v2g_ctx,
         };
         socklen_t addrlen = sizeof(sdp_query.remote_addr);
+        int func_return;
 
         /* Check if data was received on socket */
         signed status = poll(&pollfd, 1, POLL_TIMEOUT);
@@ -508,19 +558,28 @@ int sdp_listen(struct v2g_context* v2g_ctx) {
             addr = inet_ntop(AF_INET6, &sdp_query.remote_addr.sin6_addr, addrbuf, sizeof(addrbuf));
 
             if (len != sizeof(buffer_esdp)) {
-                dlog(DLOG_LEVEL_WARNING, "Discarded packet from [%s] for ESDP:%" PRIu16 " due to unexpected length %zd", addr,
+                dlog(DLOG_LEVEL_WARNING, "Discarded packet from [%s]:%" PRIu16 " for ESDP due to unexpected length %zd", addr,
                      ntohs(sdp_query.remote_addr.sin6_port), len);
                 continue;
             }
 
-            if (sdp_validate_header(buffer_esdp, ESDP_REQUEST_TYPE, ESDP_REQUEST_PAYLOAD_LEN)) {
+            func_return = esdp_validate_header(buffer_esdp, ESDP_REQUEST_TYPE, ESDP_REQUEST_PAYLOAD_LEN, ESDP_VERSION);
+            
+            if (func_return == -1) {
                 dlog(DLOG_LEVEL_WARNING, "Packet with invalid SDP header for ESDP received from [%s]:%" PRIu16, addr,
                      ntohs(sdp_query.remote_addr.sin6_port));
                 continue;
+            } else if (func_return == 1) {
+            	continue;
             }
 
-            sdp_query.security_requested = (sdp_security)buffer_esdp[SDP_HEADER_LEN + 0];
-            sdp_query.proto_requested = (sdp_transport_protocol)buffer_esdp[SDP_HEADER_LEN + 1];
+            sdp_query.security_requested = (sdp_security)buffer_esdp[SDP_HEADER_LEN + 4];
+            sdp_query.proto_requested = (sdp_transport_protocol)buffer_esdp[SDP_HEADER_LEN + 5];
+            
+            /* Temporarily hardcoded to No TLS & TCP. Remove the next two lines
+             once Josev is updated with corresponding required changes */
+            sdp_query.security_requested = (sdp_security)0x10;
+            sdp_query.proto_requested = (sdp_transport_protocol)0x00;
 
             dlog(DLOG_LEVEL_INFO, "Received ESDP packet from [%s]:%" PRIu16 " with security 0x%02x and protocol 0x%02x",
                  addr, ntohs(sdp_query.remote_addr.sin6_port), sdp_query.security_requested, sdp_query.proto_requested);
