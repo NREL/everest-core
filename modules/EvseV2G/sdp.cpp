@@ -575,11 +575,6 @@ int sdp_listen(struct v2g_context* v2g_ctx) {
 
             sdp_query.security_requested = (sdp_security)buffer_esdp[SDP_HEADER_LEN + 4];
             sdp_query.proto_requested = (sdp_transport_protocol)buffer_esdp[SDP_HEADER_LEN + 5];
-            
-            /* Temporarily hardcoded to No TLS & TCP. Remove the next two lines
-             once Josev is updated with corresponding required changes */
-            sdp_query.security_requested = (sdp_security)0x10;
-            sdp_query.proto_requested = (sdp_transport_protocol)0x00;
 
             dlog(DLOG_LEVEL_INFO, "Received ESDP packet from [%s]:%" PRIu16 " with security 0x%02x and protocol 0x%02x",
                  addr, ntohs(sdp_query.remote_addr.sin6_port), sdp_query.security_requested, sdp_query.proto_requested);
