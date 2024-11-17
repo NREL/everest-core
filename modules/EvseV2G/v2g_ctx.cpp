@@ -323,6 +323,7 @@ struct v2g_context* v2g_ctx_create(ISO15118_chargerImplBase* p_chargerImplBase, 
     ctx->network_read_timeout_tls = 5000;
 
     ctx->sdp_socket = -1;
+    ctx->esdp_socket = -1; // Added for ESDP
     ctx->tcp_socket = -1;
     ctx->tls_socket.fd = -1;
 #ifdef EVEREST_MBED_TLS
