@@ -1,0 +1,114 @@
+ISO15118-200 DEFINITIONS ::=
+BEGIN
+
+Extensions ::= SEQUENCE {
+    standardized	 StandardizedExtensions,
+    external	 ExternalExtensions OPTIONAL
+}
+
+StandardizedExtensions ::= SEQUENCE (SIZE(1..MAX)) OF StandardizedExtension
+
+StandardizedExtension ::= SEQUENCE {
+    extensionID	 INTEGER,
+    extensionValue	 OCTET STRING
+}
+
+ExternalExtensions ::= SEQUENCE (SIZE(1..MAX)) OF ExternalExtension
+
+ExternalExtension ::= SEQUENCE {
+    externalExtensionID	 OBJECT IDENTIFIER,
+    critical	 BOOLEAN DEFAULT TRUE,
+    extensionValue	 OCTET STRING
+}
+
+ChargingInterface ::= ENUMERATED {
+    nacs(0),
+    ccs1(1),
+    ccs2(2),
+    chademo(3),
+    chaoji(4),
+    type-1(5),
+    type-2(6),
+    mcs(7)
+}
+
+BasicSignaling ::= SEQUENCE (SIZE(1..MAX)) OF BasicSignalingProtocol
+
+BasicSignalingProtocol ::= ENUMERATED {
+    iec61851-1-ED2(0),
+    iec61851-1-ED3(1),
+    iec61851-23-ED1(2),
+    iec61851-23-ED2(3)
+}
+
+IPv6Socket ::= SEQUENCE {
+    ipv6Address	 OCTET STRING (SIZE(16)),
+    tcpPort	 OCTET STRING (SIZE(4))
+}
+
+HighLevelCommunication ::= SEQUENCE (SIZE(1..MAX)) OF HighLevelCommunicationTuple
+
+HighLevelCommunicationTuple ::= SEQUENCE {
+    hlcProtocol	 HLCProtocol,
+    securityProfileTuple	 SEQUENCE (SIZE(1..MAX)) OF SecurityProfileTuple
+}
+
+SecurityProfileTuple ::= SEQUENCE {
+    securityProfile	 SecurityProfile,
+    authorizationMethod	 SEQUENCE (SIZE(1..MAX)) OF AuthorizationMethod,
+    energyTransferMode	 SEQUENCE (SIZE(1..MAX)) OF EnergyTransferMode,
+    ...
+}
+
+HLCProtocol ::= ENUMERATED {
+    din-spec-70121-2014(0),
+    iso-15118-2-2014(1),
+    iso-15118-20-2022(2),
+    sae-j2847-2-202309(3)
+}
+
+SecurityProfile ::= ENUMERATED {
+    tcpOnly(0),
+    tls12-server(2),
+    tls13-mutual(20)
+}
+
+AuthorizationMethod ::= ENUMERATED {
+    eim(0),
+    pnc-2(1),
+    pnc-20(2)
+}
+
+EnergyTransferMode ::= ENUMERATED {
+    dc(0),
+    dc-bpt(1),
+    ac(2),
+    ac-bpt(3)
+}
+
+EMSPIdentifiers ::= SEQUENCE (SIZE(1..MAX)) OF EMSPIdentifier
+
+EMSPIdentifier ::= OCTET STRING (SIZE(1..MAX))
+
+DCChargingLimits ::= SEQUENCE {
+    maximumVoltage	 INTEGER,
+    minimumVoltage	 INTEGER,
+    ...
+}
+
+ConductiveChargingInterfaceLimitations ::= SEQUENCE {
+    maximumContactorTemperature	 INTEGER,
+    ...
+}
+
+EVCharacteristics ::= SEQUENCE {
+    vehicleIdentificationNumber	 OCTET STRING (SIZE(17)) OPTIONAL,
+    evccSoftwareVersion	 UTF8String (SIZE(1..MAX)) OPTIONAL
+}
+
+ChargingStationCharacteristics ::= SEQUENCE {
+    evseID	 OCTET STRING (SIZE(1..MAX)) OPTIONAL,
+    seccSoftwareVersion	 UTF8String (SIZE(1..MAX)) OPTIONAL
+}
+
+END
