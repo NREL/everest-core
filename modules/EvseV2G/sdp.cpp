@@ -253,8 +253,10 @@ int encode_ESDPRes_Extensions(uint8_t* buffer_esdp, int offset, struct sockaddr_
     StandardizedExtension_t *ipv6_socket_ext = (StandardizedExtension_t *)calloc(1, sizeof(StandardizedExtension_t));
     ipv6_socket_ext -> extensionID = 3;
     IPv6Socket_t *ipv6_socket = (IPv6Socket_t *)calloc(1, sizeof(IPv6Socket_t));
-    const unsigned char *ipv6_secc_address = (const unsigned char *)&(addr -> sin6_addr);
-    const unsigned char *ipv6_secc_port = (const unsigned char *)&(addr -> sin6_port);
+    uint8_t ipv6_secc_address[sizeof(addr -> sin6_addr)] = {0};
+    uint8_t ipv6_secc_port[4] = {0};
+    memcpy(&ipv6_secc_address[0], &addr->sin6_addr, sizeof(addr->sin6_addr));
+    memcpy(&ipv6_secc_port[2], &addr->sin6_port, sizeof(addr->sin6_port));
     OCTET_STRING_fromBuf(&ipv6_socket -> ipv6Address, (const char *)&ipv6_secc_address, sizeof(ipv6_secc_address));
     OCTET_STRING_fromBuf(&ipv6_socket -> tcpPort, (const char *)&ipv6_secc_port, sizeof(ipv6_secc_port));
     uint8_t *ip_buffer = (uint8_t *)calloc(128, sizeof(uint8_t));
@@ -483,8 +485,8 @@ int encode_ESDPRes_Extensions(uint8_t* buffer_esdp, int offset, struct sockaddr_
     free(evseChar_buffer);
 
     /* The following commented code block can be used for debugging asn1 encode output */
-    /* xer_fprint(stdout, &asn_DEF_Extensions, extensions);
-    dlog(DLOG_LEVEL_INFO, "Number of standardized extensions: %ld", extensions->standardized.list.count);
+    //xer_fprint(stdout, &asn_DEF_Extensions, extensions);
+    /* dlog(DLOG_LEVEL_INFO, "Number of standardized extensions: %ld", extensions->standardized.list.count);
     for (int p = 0; p < extensions -> standardized.list.count; p++) {
         StandardizedExtension_t *temp = extensions -> standardized.list.array[p];
         dlog(DLOG_LEVEL_INFO, "Extension ID: %ld, Value Size: %ld", temp -> extensionID, temp -> extensionValue.size);
@@ -527,15 +529,12 @@ int esdp_create_response(uint8_t* buffer_esdp, struct sockaddr_in6* addr, enum s
     buffer_esdp[offset++] = security;
     buffer_esdp[offset++] = proto; */
 
-    dlog(DLOG_LEVEL_INFO, "Offset before encoding Extensions: %ld", offset);
-
     /* Now fill in the rest of the buffer with ESDP Extensions payload */
     encode_return = encode_ESDPRes_Extensions(buffer_esdp, offset, addr);
     if (encode_return > 0) {
         offset = encode_return;
     }
 
-    dlog(DLOG_LEVEL_INFO, "Offset after encoding Extensions: %ld", offset);
     /* now fill in the header with payload length */
     sdp_write_header(buffer_esdp, ESDP_RESPONSE_TYPE, offset - SDP_HEADER_LEN);
 
@@ -722,20 +721,28 @@ int decode_standardized_extensions(const StandardizedExtensions_t *extensions, s
                         /* Placeholder switch block for future code expansion */
                         switch(*ev_chrg_int) {
                             case ChargingInterface_nacs:
+                                dlog(DLOG_LEVEL_INFO, "Charging Interface: NACS");
                                 break;
                             case ChargingInterface_ccs1:
+                                dlog(DLOG_LEVEL_INFO, "Charging Interface: CCS1");
                                 break;
                             case ChargingInterface_ccs2:
+                                dlog(DLOG_LEVEL_INFO, "Charging Interface: CCS2");
                                 break;
                             case ChargingInterface_chademo:
+                                dlog(DLOG_LEVEL_INFO, "Charging Interface: CHAdeMO");
                                 break;
                             case ChargingInterface_chaoji:
+                                dlog(DLOG_LEVEL_INFO, "Charging Interface: Chaoji");
                                 break;
                             case ChargingInterface_type_1:
+                                dlog(DLOG_LEVEL_INFO, "Charging Interface: Type-1");
                                 break;
                             case ChargingInterface_type_2:
+                                dlog(DLOG_LEVEL_INFO, "Charging Interface: Type-2");
                                 break;
                             case ChargingInterface_mcs:
+                                dlog(DLOG_LEVEL_INFO, "Charging Interface: MCS");
                                 break;
                             default:
                                 dlog(DLOG_LEVEL_ERROR, "Unknown Charging Interface");
@@ -758,12 +765,16 @@ int decode_standardized_extensions(const StandardizedExtensions_t *extensions, s
                             /* Placeholder switch block for future code expansion */
                             switch(*ev_bsc_sgnlng -> list.array[k]) {
                                 case BasicSignalingProtocol_iec61851_1_ED2:
+                                    dlog(DLOG_LEVEL_INFO, "Basic Signaling Protocol[%ld]: IEC 61851-01 Ed-02", k+1);
                                     break;
                                 case BasicSignalingProtocol_iec61851_1_ED3:
+                                    dlog(DLOG_LEVEL_INFO, "Basic Signaling Protocol[%ld]: IEC 61851-01 Ed-03", k+1);
                                     break;
                                 case BasicSignalingProtocol_iec61851_23_ED1:
+                                    dlog(DLOG_LEVEL_INFO, "Basic Signaling Protocol[%ld]: IEC 61851-23 Ed-01", k+1);
                                     break;
                                 case BasicSignalingProtocol_iec61851_23_ED2:
+                                    dlog(DLOG_LEVEL_INFO, "Basic Signaling Protocol[%ld]: IEC 61851-23 Ed-02", k+1);
                                     break;
                                 default:
                                     dlog(DLOG_LEVEL_ERROR, "Unknown Basic Signaling Protocol");
@@ -777,9 +788,10 @@ int decode_standardized_extensions(const StandardizedExtensions_t *extensions, s
                     break;
                 }
                 case 3: {
-                    //IPv6Socket_t *ev_ip_socket = NULL;
-                    //asn_dec_rval_t rval_ip_socket = ber_decode(NULL, &asn_DEF_IPv6Socket, (void **)&ev_ip_socket,
-                    //    extensionVal_buf, extensionVal_size);
+                    IPv6Socket_t *ev_ip_socket = NULL;
+                    asn_dec_rval_t rval_ip_socket = ber_decode(NULL, &asn_DEF_IPv6Socket, (void **)&ev_ip_socket,
+                        extensionVal_buf, extensionVal_size);
+                    
                     dlog(DLOG_LEVEL_WARNING, "ESDPReq payload includes IPv6 Socket extension");
                     break;
                 }
@@ -790,6 +802,65 @@ int decode_standardized_extensions(const StandardizedExtensions_t *extensions, s
                     
                     if (rval_hlc.code == RC_OK) {
                         dlog(DLOG_LEVEL_INFO, "Successfully decoded HLC Extension");
+                        /* Placeholder switch block for future code expansion */
+                        for (int ii = 0; ii < ev_hlc -> list.count; ii++) {
+                            HighLevelCommunicationTuple_t *tuple = ev_hlc -> list.array[ii];
+                            switch (tuple -> hlcProtocol) {
+                                case HLCProtocol_din_spec_70121_2014:
+                                    break;
+                                case HLCProtocol_iso_15118_2_2014:
+                                    break;
+                                case HLCProtocol_iso_15118_20_2022:
+                                    break;
+                                default:
+                                    dlog(DLOG_LEVEL_ERROR, "Unknown HLC Protocol (%ld)", tuple -> hlcProtocol);
+                                    break;
+                            }
+                            for (int jj = 0; jj < tuple -> securityProfileTuple.list.count; jj++) {
+                                SecurityProfileTuple_t *sp_tuple = tuple -> securityProfileTuple.list.array[jj];
+                                switch(sp_tuple -> securityProfile) {
+                                    case SecurityProfile_tcpOnly:
+                                        break;
+                                    case SecurityProfile_tls12_server:
+                                        break;
+                                    case SecurityProfile_tls13_mutual:
+                                        break;
+                                    default:
+                                        dlog(DLOG_LEVEL_ERROR, "Unknown Security Profile (%ld)", sp_tuple -> securityProfile);
+                                        break;
+                                }
+                                for (int kk = 0; kk < sp_tuple -> authorizationMethod.list.count; kk++) {
+                                    AuthorizationMethod_t *auth_method = sp_tuple -> authorizationMethod.list.array[kk];
+                                    switch(*auth_method) {
+                                        case AuthorizationMethod_eim:
+                                            break;
+                                        case AuthorizationMethod_pnc_2:
+                                            break;
+                                        case AuthorizationMethod_pnc_20:
+                                            break;
+                                        default:
+                                            dlog(DLOG_LEVEL_ERROR, "Unknown Authorization Method (%ld)", *auth_method);
+                                            break;
+                                    }
+                                }
+                                for (int kk = 0; kk < sp_tuple -> energyTransferMode.list.count; kk++) {
+                                    EnergyTransferMode_t *energy_mode = sp_tuple -> energyTransferMode.list.array[kk];
+                                    switch(*energy_mode) {
+                                        case EnergyTransferMode_dc:
+                                            break;
+                                        case EnergyTransferMode_dc_bpt:
+                                            break;
+                                        case EnergyTransferMode_ac:
+                                            break;
+                                        case EnergyTransferMode_ac_bpt:
+                                            break;
+                                        default:
+                                            dlog(DLOG_LEVEL_ERROR, "Unknown Energy Transfer Mode (%ld)", *energy_mode);
+                                            break;
+                                    }
+                                }
+                            }
+                        }
                         ASN_STRUCT_FREE(asn_DEF_HighLevelCommunication, ev_hlc);
                     } else {
                         dlog(DLOG_LEVEL_ERROR, "Failed to decode HLC extension");
@@ -804,7 +875,7 @@ int decode_standardized_extensions(const StandardizedExtensions_t *extensions, s
                     if (rval_emsp.code == RC_OK) {
                         dlog(DLOG_LEVEL_INFO, "Successfully decoded EMSP Identifiers extension");
                         for (int k = 0; k < ev_emsp -> list.count; k++) {
-                            //printf("    EMSP Identifier[%d]: %s\n", k+1, emsp -> list.array[k] -> buf);
+                            dlog(DLOG_LEVEL_INFO, "EMSP Identifier[%d]: %s\n", k+1, ev_emsp -> list.array[k] -> buf);
                         }
                         ASN_STRUCT_FREE(asn_DEF_EMSPIdentifiers, ev_emsp);
                     } else {
@@ -819,8 +890,8 @@ int decode_standardized_extensions(const StandardizedExtensions_t *extensions, s
                     
                     if (rval_limits.code == RC_OK) {
                         dlog(DLOG_LEVEL_INFO, "Successfully decoded DC Charging Limits extension");
-                        //printf("    Maximum Voltage: %ld [V]\n", limits -> maximumVoltage);
-                        //printf("    Maximum Voltage: %ld [V]\n", limits -> minimumVoltage);
+                        dlog(DLOG_LEVEL_INFO, "Maximum Voltage: %ld [V]\n", ev_limits -> maximumVoltage);
+                        dlog(DLOG_LEVEL_INFO, "Maximum Voltage: %ld [V]\n", ev_limits -> minimumVoltage);
                         ASN_STRUCT_FREE(asn_DEF_DCChargingLimits, ev_limits);
                     } else {
                         dlog(DLOG_LEVEL_ERROR,"Failed to decode DC Charging Limits extension");
@@ -834,8 +905,7 @@ int decode_standardized_extensions(const StandardizedExtensions_t *extensions, s
                     
                     if (rval_int_limits.code == RC_OK) {
                         dlog(DLOG_LEVEL_INFO, "Successfully decoded Conductive Charging Interface Limitations extension");
-                        //printf("Decoded Charging Interface Limits: \n");
-                        //printf("    Maximum Contactor Temp: %ld [C]\n", interface_limits -> maximumContactorTemperature);
+                        dlog(DLOG_LEVEL_INFO, "Maximum Contactor Temp: %ld [C]\n", ev_interface_limits -> maximumContactorTemperature);
                         ASN_STRUCT_FREE(asn_DEF_ConductiveChargingInterfaceLimitations, ev_interface_limits);
                     } else {
                         dlog(DLOG_LEVEL_ERROR, "Failed to decode Conductive Charging Interface Limitations extension");
@@ -850,6 +920,16 @@ int decode_standardized_extensions(const StandardizedExtensions_t *extensions, s
                     if(rval_evChar.code == RC_OK) {
                         dlog(DLOG_LEVEL_INFO, "Successfully decoded EV Characteristics extension");
                         if (evChar -> vehicleIdentificationNumber -> size > 0) {
+                            dlog(DLOG_LEVEL_INFO, "VIN (in Hex format): %02X:%02X:%02X:%02X:%02X:%02X:%02X:%02X:%02X:%02X:%02X:%02X:%02X:%02X:%02X:%02X:%02X",
+                                evChar->vehicleIdentificationNumber -> buf[0], evChar->vehicleIdentificationNumber -> buf[1],
+                                evChar -> vehicleIdentificationNumber -> buf[2], evChar -> vehicleIdentificationNumber -> buf[3],
+                                evChar -> vehicleIdentificationNumber -> buf[4], evChar -> vehicleIdentificationNumber -> buf[5],
+                                evChar -> vehicleIdentificationNumber -> buf[6], evChar -> vehicleIdentificationNumber -> buf[7],
+                                evChar -> vehicleIdentificationNumber -> buf[8], evChar -> vehicleIdentificationNumber -> buf[9],
+                                evChar -> vehicleIdentificationNumber -> buf[10], evChar -> vehicleIdentificationNumber -> buf[11],
+                                evChar -> vehicleIdentificationNumber -> buf[12], evChar -> vehicleIdentificationNumber -> buf[13],
+                                evChar -> vehicleIdentificationNumber -> buf[14], evChar -> vehicleIdentificationNumber -> buf[15],
+                                evChar -> vehicleIdentificationNumber -> buf[16]);
                             for (size_t i = 0; i < evChar -> vehicleIdentificationNumber -> size; i++) {
                                 //printf("%02X", evChar -> vehicleIdentificationNumber -> buf[i]);
                             }
@@ -857,8 +937,8 @@ int decode_standardized_extensions(const StandardizedExtensions_t *extensions, s
                             dlog(DLOG_LEVEL_WARNING, "Vehicle Identification Number was NOT communicated");
                         }
                         if (evChar -> evccSoftwareVersion -> size > 0) {
-                            //printf("    EVCC Software Version: %.*s\n", (int)evChar -> evccSoftwareVersion -> size,
-                            //    evChar -> evccSoftwareVersion -> buf);
+                            dlog(DLOG_LEVEL_INFO, "EVCC Software Version: %.*s\n", (int)evChar -> evccSoftwareVersion -> size,
+                                evChar -> evccSoftwareVersion -> buf);
                         } else {
                             dlog(DLOG_LEVEL_WARNING, "EVCC Software version was NOT communicated");
                         }
