@@ -823,9 +823,10 @@ int decode_standardized_extensions(const StandardizedExtensions_t *extensions, s
                                 SecurityProfileTuple_t *sp_tuple = tuple -> securityProfileTuple.list.array[jj];
                                 switch(sp_tuple -> securityProfile) {
                                     case SecurityProfile_tcpOnly:
-                                        sdp_query->security_requested = SDP_SECURITY_NONE;
+                                        //sdp_query->security_requested = SDP_SECURITY_NONE;
                                         break;
                                     case SecurityProfile_tls12_server:
+                                        //sdp_query->security_requested = SDP_SECURITY_TLS;
                                         break;
                                     case SecurityProfile_tls13_mutual:
                                         break;
@@ -925,9 +926,7 @@ int decode_standardized_extensions(const StandardizedExtensions_t *extensions, s
                     if(rval_evChar.code == RC_OK) {
                         dlog(DLOG_LEVEL_INFO, "Successfully decoded EV Characteristics extension");
                         if (evChar -> vehicleIdentificationNumber -> size > 0) {
-                            dlog(DLOG_LEVEL_INFO, "VIN: %.*s", (int)evChar -> vehicleIdentificationNumber -> size,
-                                evChar -> vehicleIdentificationNumber -> buf);
-                            /* dlog(DLOG_LEVEL_INFO, "VIN (in Hex format): %02X:%02X:%02X:%02X:%02X:%02X:%02X:%02X:%02X:%02X:%02X:%02X:%02X:%02X:%02X:%02X:%02X",
+                            dlog(DLOG_LEVEL_INFO, "VIN (in Hex format): %02X:%02X:%02X:%02X:%02X:%02X:%02X:%02X:%02X:%02X:%02X:%02X:%02X:%02X:%02X:%02X:%02X",
                                 evChar->vehicleIdentificationNumber -> buf[0], evChar->vehicleIdentificationNumber -> buf[1],
                                 evChar -> vehicleIdentificationNumber -> buf[2], evChar -> vehicleIdentificationNumber -> buf[3],
                                 evChar -> vehicleIdentificationNumber -> buf[4], evChar -> vehicleIdentificationNumber -> buf[5],
@@ -936,7 +935,7 @@ int decode_standardized_extensions(const StandardizedExtensions_t *extensions, s
                                 evChar -> vehicleIdentificationNumber -> buf[10], evChar -> vehicleIdentificationNumber -> buf[11],
                                 evChar -> vehicleIdentificationNumber -> buf[12], evChar -> vehicleIdentificationNumber -> buf[13],
                                 evChar -> vehicleIdentificationNumber -> buf[14], evChar -> vehicleIdentificationNumber -> buf[15],
-                                evChar -> vehicleIdentificationNumber -> buf[16]); */
+                                evChar -> vehicleIdentificationNumber -> buf[16]);
                             for (size_t i = 0; i < evChar -> vehicleIdentificationNumber -> size; i++) {
                                 //printf("%02X", evChar -> vehicleIdentificationNumber -> buf[i]);
                             }
@@ -966,7 +965,14 @@ int decode_standardized_extensions(const StandardizedExtensions_t *extensions, s
         }
     }
 
+    /* Since Transport protocol is not included in HLC Extension under ESDP Standardized extensions,
+        this is currently being hardcoded*/
     sdp_query->proto_requested = SDP_TRANSPORT_PROTOCOL_TCP;
+    
+    /* Currently hardcoding security to No-TLS. This line can be removed when this value starts getting 
+        set from decoded HLC Extension */
+    sdp_query->security_requested = SDP_SECURITY_NONE;
+
     return 0;
 }
 
@@ -1232,9 +1238,6 @@ int sdp_listen(struct v2g_context* v2g_ctx) {
                  ntohs(sdp_query.remote_addr.sin6_port));
                 continue;
             }
-
-            sdp_query.security_requested = SDP_SECURITY_NONE;
-            sdp_query.proto_requested = SDP_TRANSPORT_PROTOCOL_TCP;
 
             dlog(DLOG_LEVEL_INFO, "Received ESDP packet from [%s]:%" PRIu16 " with security 0x%02x and protocol 0x%02x",
                  addr, ntohs(sdp_query.remote_addr.sin6_port), sdp_query.security_requested, sdp_query.proto_requested);
