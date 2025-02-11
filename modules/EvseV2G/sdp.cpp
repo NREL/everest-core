@@ -201,7 +201,7 @@ int sdp_create_response(uint8_t* buffer, struct sockaddr_in6* addr, enum sdp_sec
     return offset;
 }
 
-int encode_ESDPRes_Extensions(uint8_t* buffer_esdp, int offset, struct sockaddr_in6* addr) {
+int encode_ESDPRes_Extensions(uint8_t* buffer_esdp, int offset, struct sockaddr_in6* addr, enum sdp_security security) {
     /* Create and populate Extensions */
     Extensions_t *extensions = (Extensions_t *)calloc(1, sizeof(Extensions_t));
     if (!extensions) {
@@ -266,9 +266,21 @@ int encode_ESDPRes_Extensions(uint8_t* buffer_esdp, int offset, struct sockaddr_
     ASN_SEQUENCE_ADD(&extensions -> standardized, ipv6_socket_ext);
     free(ip_buffer);
 
+    /* Placeholder switch block. Can be used to selectively encode HLC Extension */
+    /* switch (security) {
+        case SDP_SECURITY_TLS:
+            sec_profile01 -> securityProfile = SecurityProfile_tls12_server;
+        case SDP_SECURITY_NONE:
+            sec_profile01 -> securityProfile = SecurityProfile_tcpOnly;
+            break;
+        default:
+            dlog(DLOG_LEVEL_ERROR, "Unknown Security. Unable to encode correct security into ESDPResponse's HLC extension");
+            break:
+    } */
+
     /* ExtensionID 4 - High Level Communication extension */
-    /* Using a placeholder list of all possible combinations for now. Only thing left to do would be 
-    to remove unsupported combinations in the future */
+    /* Using a placeholder list of all possible combinations for now. Use the switch block above to selectively encode supported HLC Extensions.
+        Then remove unsupported combinations in the future */
     StandardizedExtension_t *hlc_ext = (StandardizedExtension_t *)calloc(1, sizeof(StandardizedExtension_t));
     hlc_ext -> extensionID = 4;
     HighLevelCommunication_t *hlc = (HighLevelCommunication_t *)calloc(1, sizeof(HighLevelCommunication_t));
@@ -505,9 +517,7 @@ int encode_ESDPRes_Extensions(uint8_t* buffer_esdp, int offset, struct sockaddr_
     return offset;
 }
 
-/* Create response packet for ESDP.
- Duplicated the original sdp_create_response function since payload for
- ESDP Response has additional elements compared to regular SDP Response */
+/* Create response packet for ESDP */
 int esdp_create_response(uint8_t* buffer_esdp, struct sockaddr_in6* addr, enum sdp_security security,
                         enum sdp_transport_protocol proto) {
     int offset = SDP_HEADER_LEN; // Header length is same for both SDP and ESDP
@@ -521,16 +531,8 @@ int esdp_create_response(uint8_t* buffer_esdp, struct sockaddr_in6* addr, enum s
     buffer_esdp[offset++] = (ESDP_MAX_V2GTP_PAYLOAD_SIZE >> 8) & 0xff;
     buffer_esdp[offset++] = ESDP_MAX_V2GTP_PAYLOAD_SIZE & 0xff;
 
-    /* address is already network byte order */
-    /* memcpy(&buffer_esdp[offset], &addr->sin6_addr, sizeof(addr->sin6_addr));
-    offset += sizeof(addr->sin6_addr);
-    memcpy(&buffer_esdp[offset], &addr->sin6_port, sizeof(addr->sin6_port));
-    offset += sizeof(addr->sin6_port);
-    buffer_esdp[offset++] = security;
-    buffer_esdp[offset++] = proto; */
-
     /* Now fill in the rest of the buffer with ESDP Extensions payload */
-    encode_return = encode_ESDPRes_Extensions(buffer_esdp, offset, addr);
+    encode_return = encode_ESDPRes_Extensions(buffer_esdp, offset, addr, security);
     if (encode_return > 0) {
         offset = encode_return;
     }
@@ -697,6 +699,8 @@ int esdp_send_response(int esdp_socket, struct sdp_query* sdp_query) {
 // Function to decode the Standardized ESDP extensions
 int decode_standardized_extensions(const StandardizedExtensions_t *extensions, struct sdp_query* sdp_query) {
     /* Returns 1 if unable to decode Standardized ESDP extensions and 0 otherwise */
+    /* Requested Security and Transport must be updated in the "sdp_query" struct with the values decoded in HLC Extension (ID 4).
+        Currently these are hardcoded to No-TLS and TCP respectively in "sdp_listen" under esdp */
     if (!extensions) {
         dlog(DLOG_LEVEL_ERROR, "No Standardized ESDP extensions to decode");
         return 1;
@@ -760,7 +764,6 @@ int decode_standardized_extensions(const StandardizedExtensions_t *extensions, s
                                     extensionVal_buf, extensionVal_size);
                     
                     if (rval_bsc_sgnlng.code == RC_OK) {
-                        dlog(DLOG_LEVEL_INFO, "Successfully decoded Basic Signaling extension");
                         for (int k = 0; k < ev_bsc_sgnlng -> list.count; k++) {
                             /* Placeholder switch block for future code expansion */
                             switch(*ev_bsc_sgnlng -> list.array[k]) {
@@ -820,6 +823,7 @@ int decode_standardized_extensions(const StandardizedExtensions_t *extensions, s
                                 SecurityProfileTuple_t *sp_tuple = tuple -> securityProfileTuple.list.array[jj];
                                 switch(sp_tuple -> securityProfile) {
                                     case SecurityProfile_tcpOnly:
+                                        sdp_query->security_requested = SDP_SECURITY_NONE;
                                         break;
                                     case SecurityProfile_tls12_server:
                                         break;
@@ -872,7 +876,7 @@ int decode_standardized_extensions(const StandardizedExtensions_t *extensions, s
                     asn_dec_rval_t rval_emsp = ber_decode(NULL, &asn_DEF_EMSPIdentifiers, (void **)&ev_emsp,
                         extensionVal_buf, extensionVal_size);
                     
-                    if (rval_emsp.code == RC_OK) {
+                    /* if (rval_emsp.code == RC_OK) {
                         dlog(DLOG_LEVEL_INFO, "Successfully decoded EMSP Identifiers extension");
                         for (int k = 0; k < ev_emsp -> list.count; k++) {
                             dlog(DLOG_LEVEL_INFO, "EMSP Identifier[%d]: %s\n", k+1, ev_emsp -> list.array[k] -> buf);
@@ -880,7 +884,8 @@ int decode_standardized_extensions(const StandardizedExtensions_t *extensions, s
                         ASN_STRUCT_FREE(asn_DEF_EMSPIdentifiers, ev_emsp);
                     } else {
                         dlog(DLOG_LEVEL_ERROR, "Failed to decode EMSP Identifiers extension");
-                    }
+                    } */
+                    dlog(DLOG_LEVEL_WARNING, "ESDPReq payload includes EMSP Identifiers extension");
                     break;
                 }
                 case 6: {
@@ -920,7 +925,9 @@ int decode_standardized_extensions(const StandardizedExtensions_t *extensions, s
                     if(rval_evChar.code == RC_OK) {
                         dlog(DLOG_LEVEL_INFO, "Successfully decoded EV Characteristics extension");
                         if (evChar -> vehicleIdentificationNumber -> size > 0) {
-                            dlog(DLOG_LEVEL_INFO, "VIN (in Hex format): %02X:%02X:%02X:%02X:%02X:%02X:%02X:%02X:%02X:%02X:%02X:%02X:%02X:%02X:%02X:%02X:%02X",
+                            dlog(DLOG_LEVEL_INFO, "VIN: %.*s", (int)evChar -> vehicleIdentificationNumber -> size,
+                                evChar -> vehicleIdentificationNumber -> buf);
+                            /* dlog(DLOG_LEVEL_INFO, "VIN (in Hex format): %02X:%02X:%02X:%02X:%02X:%02X:%02X:%02X:%02X:%02X:%02X:%02X:%02X:%02X:%02X:%02X:%02X",
                                 evChar->vehicleIdentificationNumber -> buf[0], evChar->vehicleIdentificationNumber -> buf[1],
                                 evChar -> vehicleIdentificationNumber -> buf[2], evChar -> vehicleIdentificationNumber -> buf[3],
                                 evChar -> vehicleIdentificationNumber -> buf[4], evChar -> vehicleIdentificationNumber -> buf[5],
@@ -929,7 +936,7 @@ int decode_standardized_extensions(const StandardizedExtensions_t *extensions, s
                                 evChar -> vehicleIdentificationNumber -> buf[10], evChar -> vehicleIdentificationNumber -> buf[11],
                                 evChar -> vehicleIdentificationNumber -> buf[12], evChar -> vehicleIdentificationNumber -> buf[13],
                                 evChar -> vehicleIdentificationNumber -> buf[14], evChar -> vehicleIdentificationNumber -> buf[15],
-                                evChar -> vehicleIdentificationNumber -> buf[16]);
+                                evChar -> vehicleIdentificationNumber -> buf[16]); */
                             for (size_t i = 0; i < evChar -> vehicleIdentificationNumber -> size; i++) {
                                 //printf("%02X", evChar -> vehicleIdentificationNumber -> buf[i]);
                             }
@@ -959,6 +966,7 @@ int decode_standardized_extensions(const StandardizedExtensions_t *extensions, s
         }
     }
 
+    sdp_query->proto_requested = SDP_TRANSPORT_PROTOCOL_TCP;
     return 0;
 }
 
@@ -994,9 +1002,6 @@ int decode_esdp_payload(uint8_t* buffer, struct sdp_query* sdp_query, ssize_t re
     } else {
         dlog(DLOG_LEVEL_INFO, "Successfully decoded Standardized Extensions in ESDPReq payload");
     }
-
-    // Empty buffer to free up space 
-    free(buffer_esdp);
     
     /* Check presence of external extensions per ISO/PAS CD 15118-200:2024(E)*/
     if (extensions -> external) {
@@ -1196,17 +1201,11 @@ int sdp_listen(struct v2g_context* v2g_ctx) {
                     dlog(DLOG_LEVEL_ERROR, "recvfrom() failed for ESDP: %s", strerror(errno));
                 continue;
             } else {
-                dlog(DLOG_LEVEL_INFO, "Recieved ESDP packet. Reported payload length: %" PRIu32 " bytes while received payload length is %zu bytes",
+                dlog(DLOG_LEVEL_INFO, "Recieved ESDP packet. Reported payload length is %" PRIu32 " bytes while received payload length is %zu bytes",
                      reported_len ,len - SDP_HEADER_LEN);
             }
 
             addr = inet_ntop(AF_INET6, &sdp_query.remote_addr.sin6_addr, addrbuf, sizeof(addrbuf));
-
-            /* if (len != sizeof(buffer_esdp)) {
-                dlog(DLOG_LEVEL_WARNING, "Discarded packet from [%s]:%" PRIu16 " for ESDP due to unexpected length %zd", addr,
-                     ntohs(sdp_query.remote_addr.sin6_port), len);
-                continue;
-            } */
 
             func_return = esdp_validate_header(buffer_esdp, ESDP_REQUEST_TYPE, MAX_ESDP_REQUEST_PAYLOAD_LEN, ESDP_VERSION);
             
@@ -1234,8 +1233,8 @@ int sdp_listen(struct v2g_context* v2g_ctx) {
                 continue;
             }
 
-            sdp_query.security_requested = (sdp_security)buffer_esdp[SDP_HEADER_LEN + 4];
-            sdp_query.proto_requested = (sdp_transport_protocol)buffer_esdp[SDP_HEADER_LEN + 5];
+            sdp_query.security_requested = SDP_SECURITY_NONE;
+            sdp_query.proto_requested = SDP_TRANSPORT_PROTOCOL_TCP;
 
             dlog(DLOG_LEVEL_INFO, "Received ESDP packet from [%s]:%" PRIu16 " with security 0x%02x and protocol 0x%02x",
                  addr, ntohs(sdp_query.remote_addr.sin6_port), sdp_query.security_requested, sdp_query.proto_requested);
