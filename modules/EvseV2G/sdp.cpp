@@ -982,16 +982,17 @@ int decode_esdp_payload(uint8_t* buffer, struct sdp_query* sdp_query, ssize_t re
     /* Returns 1 if unable to decode esdp extensions and 0 otherwise*/
 
     int dec_std_ext_return;
-    ssize_t asn1_payload_size = recv_len - SDP_HEADER_LEN - 6;
+    ssize_t asn1_payload_size = recv_len - SDP_HEADER_LEN - 4;
 
     // Create a new buffer which only contains the ASN1 encoded ESDP extensions
-    uint8_t *buffer_esdp = (uint8_t *)calloc(asn1_payload_size, sizeof(uint8_t)); // "6" Since ESDPVersion, max payload size, and security/transport require 2 bytes each.
+    uint8_t *buffer_esdp = (uint8_t *)calloc(asn1_payload_size, sizeof(uint8_t)); // "4" Since ESDPVersion, max payload size, require 2 bytes each.
 
     // Copy ESDP Extensions from received message buffer to the new buffer.
-    memcpy(buffer_esdp, buffer + SDP_HEADER_LEN + 6, recv_len);
+    memcpy(buffer_esdp, buffer + SDP_HEADER_LEN + 4, asn1_payload_size);
 
     /* Decode the buffer into "extensions" object*/
     Extensions_t *extensions = (Extensions_t *)calloc(1, sizeof(Extensions_t));
+
     asn_dec_rval_t rval = asn_decode(NULL, ATS_DER, &asn_DEF_Extensions, (void **)&extensions, buffer_esdp, asn1_payload_size);
     if (rval.code != RC_OK) {
         dlog(DLOG_LEVEL_ERROR, "Decoding failed at byte %ld", rval.consumed);
@@ -1003,7 +1004,7 @@ int decode_esdp_payload(uint8_t* buffer, struct sdp_query* sdp_query, ssize_t re
 
     /* Decode Standardized Extensions*/
     dec_std_ext_return = decode_standardized_extensions(&extensions -> standardized, sdp_query);
-
+    
     if (dec_std_ext_return) {
         dlog(DLOG_LEVEL_ERROR, "Failed to decode Standardized Extensions in ESDPReq payload");
     } else {
@@ -1011,6 +1012,7 @@ int decode_esdp_payload(uint8_t* buffer, struct sdp_query* sdp_query, ssize_t re
     }
     
     /* Check presence of external extensions per ISO/PAS CD 15118-200:2024(E)*/
+    
     if (extensions -> external) {
         dlog(DLOG_LEVEL_INFO, "External ESDP Extensions present in the received ESDPReq message");
         // Define a function to decode external extensions and call it here.
