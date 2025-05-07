@@ -1,0 +1,1000 @@
+ 1024  apt list --upgradable
+ 1025  sudo apt-get upgrade -y curl
+ 1026  apt list --upgradable
+ 1027  sudo apt update
+ 1028  clear
+ 1029  cd asn1c/Usage/
+ 1030  touch rectangle.asn
+ 1031  nano rectangle.asn 
+ 1032  ASN1C -no-gen-example rectange.asn
+ 1033  asn1c -no-gen-example rectange.asn
+ 1034  asn1c -no-gen-example rectangle.asn
+ 1035  clear
+ 1036  touch main.c
+ 1037  nano main.c 
+ 1038  cc -I. -o rencode *.c
+ 1039  clear
+ 1040  ls
+ 1041  asn1c -no-gen-example rectangle.asn
+ 1042  clear
+ 1043  asn1c -no-gen-example rectangle.asn
+ 1044  cc -I. -o rencode *.c
+ 1045  cd ls
+ 1046  cd ld
+ 1047  nano ld
+ 1048  cd /tmp
+ 1049  ls
+ 1050  cd ~/asn1c/Usage/
+ 1051  clear
+ 1052  make -f converter-example.mk
+ 1053  cc -I. -o rencode *.c
+ 1054  clear
+ 1055  cd
+ 1056  cd asn1c
+ 1057  clear
+ 1058  mkdir asn1c
+ 1059  cd asn1c
+ 1060  ssh-add
+ 1061  git clone git@github.com:vlm/asn1c.git
+ 1062  ls
+ 1063  cd asn1c
+ 1064  make
+ 1065  test -f configure || autoreconf -iv
+ 1066  ./configure
+ 1067  make 
+ 1068  make check
+ 1069  cd ..
+ 1070  git clone git@github.com:vlm/asn1c.git
+ 1071  automake --version
+ 1072  libtool --version
+ 1073  flex --version
+ 1074  bison --version
+ 1075  bison --help
+ 1076  sudo apt remove bison
+ 1077  bison --version
+ 1078  clear
+ 1079  bison
+ 1080  cd Downloads
+ 1081  cd 
+ 1082  ls
+ 1083  cd Downloads/
+ 1084  apt-cache madison bison
+ 1085  ls
+ 1086  tar --help
+ 1087  tar -xvzf bison-2.6.tar.gz 
+ 1088  cd bison-2.6/
+ 1089  ls
+ 1090  ./configure
+ 1091  make
+ 1092  cd ..
+ 1093  tar -xvzf bison-2.7 
+ 1094  tar -xvzf bison-2.7.1.tar.gz
+ 1095  cd bison-2.7.1/
+ 1096  ls
+ 1097  ./configure
+ 1098  make
+ 1099  cd ..
+ 1100  ls
+ 1101  rm bison-2.7.1
+ 1102  rm -rf bison-2.7.1
+ 1103  rm -rf bison-2.7.1.tar.gz
+ 1104  tar -xvzf bison-2.5.tar.gz 
+ 1105  cd bison-2.5/
+ 1106  ./configure
+ 1107  ls
+ 1108  make
+ 1109  cd ..
+ 1110  rm -rf bison-2.5
+ 1111  rm bison-2.5.tar.gz 
+ 1112  ls
+ 1113  cd bison-2.6
+ 1114  ls
+ 1115  ./configure
+ 1116  ls
+ 1117  make
+ 1118  sudo apt install bison
+ 1119  bison --version
+ 1120  clear
+ 1121  make
+ 1122  make check
+ 1123  sudo make install
+ 1124  sudo apt remove bison
+ 1125  bison --version
+ 1126  clear
+ 1127  cd ..
+ 1128  cd ../asn1c/
+ 1129  ls
+ 1130  cd asn1c/
+ 1131  ls
+ 1132  test -f configure || autoreconf -iv
+ 1133  ./configure
+ 1134  cd..
+ 1135  lcd ..
+ 1136  cd ..
+ 1137  ls
+ 1138  rm -rf asn1c/
+ 1139  ls
+ 1140  git clone git@github.com:mouse07410/asn1c.git
+ 1141  ls
+ 1142  cd asn1c/
+ 1143  test -f configure || autoreconf -iv
+ 1144  ./configure
+ 1145  make
+ 1146  make check
+ 1147  sudo make install
+ 1148  asn1c
+ 1149  asn1c --version
+ 1150  cd ..
+ 1151  ls
+ 1152  mkdir Temp
+ 1153  ls
+ 1154  rm Temp
+ 1155  rm -rf Temp
+ 1156  ls
+ 1157  mkdir temp
+ 1158  cd temp/
+ 1159  touch rectangle.asn
+ 1160  asn1c -no-gen-example rectangle.asn 
+ 1161  touch main.c
+ 1162  cc -I. -o rencode *.c
+ 1163  clear
+ 1164  cd ..
+ 1165  mkdir temp_decode
+ 1166  cd temp_decode/
+ 1167  asn1c -no-gen-example rectangle.asn 
+ 1168  touch main.c
+ 1169  cc -I. -o rdecode *.c
+ 1170  cd ..
+ 1171  cd example_constraints/
+ 1172  asn1c -no-gen-example rectangle.asn 
+ 1173  cd /usr/local/share/
+ 1174  cd asn1c/
+ 1175  ls
+ 1176  sudo snap refresh
+ 1177  sudo apt update
+ 1178  apt list --upgradable
+ 1179  sudo apt-get upgrade -y linux-libc-dev
+ 1180  sudo apt update
+ 1181  clear
+ 1182  cd asn1c/
+ 1183  ls
+ 1184  cd example_encode/
+ 1185  ./rencode ../output.ber
+ 1186  cd ../example_decode/
+ 1187  ./rdecode ../output.ber
+ 1188  cd ../temp/
+ 1189  asn1c -P esdp_definitions.asn 
+ 1190  asn1c -hel
+ 1191  asn1c -gen-autotools esdp_definitions.asn 
+ 1192  clear
+ 1193  cd ../playground/
+ 1194  asn1c -help
+ 1195  asn1c -no-gen-example esdp_definitions.asn 
+ 1196  asn1c -no-gen-example ISO15118-200.asn 
+ 1197  cd ../temp/
+ 1198  asn1c -no-gen-example esdp_definitions.asn 
+ 1199  asn1c --help
+ 1200  cd ../playground/
+ 1201  asn1c -fcompound-names -no-gen-examples ISO15118-200.asn 
+ 1202  asn1c -fcompound-names -no-gen-example ISO15118-200.asn 
+ 1203  asn1c -no-gen-example esdp_definitions.asn 
+ 1204  cd ../temp
+ 1205  ;s
+ 1206  asn1c -no-gen-example esdp_definitions.asn 
+ 1207  touch encode.c
+ 1208  touch decode.c
+ 1209  gcc -o encode encode.c Extensions.c -lm
+ 1210  cc -I. -o encode *.c
+ 1211  gcc --help
+ 1212  gcc -o encode encode.c Extensions.c -lm
+ 1213  gcc -I. -o encode encode.c Extensions.c -lm
+ 1214  clear
+ 1215  asn1c -EF esdp_definitions.asn 
+ 1216  asn1c -EF esdp_definitions.asn -> temp.asn
+ 1217  asn1c -EF esdp_definitions.asn > temp.asn
+ 1218  asn1c -fnative-types -fcompound-names esdp_definitions.asn 
+ 1219  asn1c -no-gen-example esdp_extensions_new.asn 
+ 1220  touch encode.c
+ 1221  touch decode.c
+ 1222  gcc -I. -o encode encode.c Extensions.c -lm
+ 1223  gcc -o encode encode.c Extensions.c -lm
+ 1224  clear
+ 1225  gcc -I. -o encode encode.c Extensions.c -lm
+ 1226  gcc -I. -o encode encode.c Extensions.c -lm > ~/temp_error_log.txt
+ 1227  sudo snap refresh
+ 1228  sudo apt update
+ 1229  clear
+ 1230  sudo snap refresh
+ 1231  sudo apt update
+ 1232  clear
+ 1233  gcc -I. -o encode encode.c Extensions.c -lm
+ 1234  cd asn1c/temp/
+ 1235  ls
+ 1236  clear
+ 1237  gcc -I. -o encode encode.c Extensions.c -lm
+ 1238  gcc -g -I. -o encode encode.c Extensions.c -lm
+ 1239  gcc -Q -I. -o encode encode.c Extensions.c -lm
+ 1240  gcc -I. -o encode encode.c Extensions.c -lm
+ 1241  gcc -I. -o encode encode.c *.c -lm
+ 1242  gcc -I. -o encode *.c -lm
+ 1243  ./encode ~/temp/output.ber
+ 1244  ./encode ~/Temp/output.ber
+ 1245  touch decode.c
+ 1246  gcc -I. -o decode $(ls *.c | grep -v encode.c) -lm
+ 1247  ./decode ~/Temp/output.ber 
+ 1248  sudo apt update
+ 1249  asn1c --version
+ 1250  clear
+ 1251  sudo apt install asn1c
+ 1252  asn1c --version
+ 1253  sudo apt remove asn1c
+ 1254  asn1c --version
+ 1255  clear
+ 1256  sudo snap refresh
+ 1257  sudo apt update
+ 1258  apt list --upgradable
+ 1259  sudo apt-get upgrade -y linux-libc-dev
+ 1260  apt list --upgradable
+ 1261  sudo apt update
+ 1262  clear
+ 1263  sudo snap refresh
+ 1264  sudo apt update
+ 1265  clear
+ 1266  sudo shutdown now
+ 1267  sudo snap refresh
+ 1268  sudo apt update
+ 1269  apt list --upgradable
+ 1270  sudo apt-get upgrade -y linux-libc-dev
+ 1271  apt list --upgradable
+ 1272  sudo apt-get upgrade -y linux-generic-hwe-22.04
+ 1273  apt list --upgradable
+ 1274  sudo apt update
+ 1275  clear
+ 1276  history > ~/history_log.txt
+ 1277  cd asn1c/temp/
+ 1278  touch encode_new.c
+ 1279  touch decode_new.c
+ 1280  gcc -I. -o encode $(ls *.c | grep -v decode.c decode_new.c) -lm
+ 1281  gcc -I. -o encode $(ls *.c | grep -v decode.c) -lm
+ 1282  Compile encode object: gcc -I. -o encode $(ls *.c | grep -v decode.c decode_new.c encode_new.c) -lm
+ 1283  touch encode_new.c decode_new.c
+ 1284  Compile encode object: gcc -I. -o encode $(ls *.c | grep -v decode.c decode_new.c encode_new.c) -lm
+ 1285  gcc -I. -o encode $(ls *.c | grep -v decode.c decode_new.c encode_new.c) -lm
+ 1286  gcc -I. -o encode $(ls *.c | grep -v decode.c) -lm
+ 1287  touch decode_new.c
+ 1288  touch encode_new.c
+ 1289  gcc -I. -o encode $(ls *.c | grep -vE "decode.c|decode_new.c|encode_new.c") -lm
+ 1290  rg --version
+ 1291  sudo apt install ripgrep
+ 1292  rg --glob '*.c' "HighLevelCommunication_t"
+ 1293  gcc -I. -o encode $(ls *.c | grep -vE "decode.c|decode_new.c|encode.c") -lm
+ 1294  gcc -I. -o decode $(ls *.c | grep -vE "encode.c|encode_new.c|decode.c") -lm
+ 1295  ./encode ~/asn1c/new_output.ber
+ 1296  ./decode ~/asn1c/new_output.ber
+ 1297  gcc -I. -o encode $(ls *.c | grep -vE "decode.c|decode_old.c|encode.c") -lm
+ 1298  gcc -I. -o encode $(ls *.c | grep -vE "decode.c|decode_old.c|encode_old.c") -lm
+ 1299  touch find_all_headers.sh
+ 1300  ./find_all_headers.sh
+ 1301  sudo ./find_all_headers.sh
+ 1302  chmod +x find_all_headers.sh 
+ 1303  sudo ./find_all_headers.sh
+ 1304  chmod +x find_all_headers.sh 
+ 1305  sudo ./find_all_headers.sh
+ 1306  chmod +x find_all_headers.sh 
+ 1307  sudo ./find_all_headers.sh
+ 1308  ls -l all_headers.h 
+ 1309  chmod u+w all_headers.h 
+ 1310  sudo chmod a+w all_headers.h 
+ 1311  gcc -I. -o encode $(ls *.c | grep -vE "decode.c|decode_old.c|encode_old.c") -lm
+ 1312  ./encode ~/asn1c/full_output.der
+ 1313  ./encode ~/asn1c/full_output.ber
+ 1314  gcc -I. -o encode $(ls *.c | grep -vE "decode.c|decode_old.c|encode_old.c") -lm
+ 1315  ./encode ~/asn1c/full_output.ber
+ 1316  gcc -I. -o encode $(ls *.c | grep -vE "decode.c|decode_old.c|encode_old.c") -lm
+ 1317  ./encode ~/asn1c/full_output.ber
+ 1318  gcc -I. -o encode $(ls *.c | grep -vE "decode.c|decode_old.c|encode_old.c") -lm
+ 1319  ./encode ~/asn1c/full_output.ber
+ 1320  gcc -I. -o encode $(ls *.c | grep -vE "decode.c|decode_old.c|encode_old.c") -lm
+ 1321  ./encode ~/asn1c/full_output.ber
+ 1322  rg --glob '*.h' "ASN_SEQUENCE_ADD"
+ 1323  gcc -I. -o encode $(ls *.c | grep -vE "decode.c|decode_old.c|encode_old.c") -lm
+ 1324  ./encode ~/asn1c/full_output.ber
+ 1325  gcc -I. -o decode $(ls *.c | grep -vE "encode.c|decode_old.c|encode_old.c") -lm
+ 1326  gcc -I. -o encode $(ls *.c | grep -vE "decode.c|decode_old.c|encode_old.c") -lm
+ 1327  ./encode ~/asn1c/full_output.ber
+ 1328  ./decode ~/asn1c/full_output.ber 
+ 1329  gcc -I. -o encode $(ls *.c | grep -vE "decode.c|decode_old.c|encode_old.c") -lm
+ 1330  ./encode ~/asn1c/full_output.ber
+ 1331  ./decode ~/asn1c/full_output.ber 
+ 1332  gcc -I. -o encode $(ls *.c | grep -vE "decode.c|decode_old.c|encode_old.c") -lm
+ 1333  ./encode ~/asn1c/full_output.ber
+ 1334  ./decode ~/asn1c/full_output.ber 
+ 1335  gcc -I. -o encode $(ls *.c | grep -vE "decode.c|decode_old.c|encode_old.c") -lm
+ 1336  ./encode ~/asn1c/full_output.ber
+ 1337  ./decode ~/asn1c/full_output.ber 
+ 1338  gcc -I. -o encode $(ls *.c | grep -vE "decode.c|decode_old.c|encode_old.c") -lm
+ 1339  ./encode ~/asn1c/full_output.ber
+ 1340  ./decode ~/asn1c/full_output.ber 
+ 1341  gcc -I. -o encode $(ls *.c | grep -vE "decode.c|decode_old.c|encode_old.c") -lm
+ 1342  ./encode ~/asn1c/full_output.ber
+ 1343  ./decode ~/asn1c/full_output.ber 
+ 1344  gcc -I. -o encode $(ls *.c | grep -vE "decode.c|decode_old.c|encode_old.c") -lm
+ 1345  ./encode ~/asn1c/full_output.ber
+ 1346  gcc -I. -o encode $(ls *.c | grep -vE "decode.c|decode_old.c|encode_old.c") -lm
+ 1347  ./encode ~/asn1c/full_output.ber
+ 1348  sudo snap refresh
+ 1349  sudo apt update
+ 1350  clear
+ 1351  cd asn1c/tem
+ 1352  cd asn1c/temp/
+ 1353  gcc -I. -o encode $(ls *.c | grep -vE "decode.c|decode_old.c|encode_old.c") -lm
+ 1354  ./encode ~/asn1c/full_output.ber 
+ 1355  ./decode ~/asn1c/full_output.ber 
+ 1356  gcc -I. -o encode $(ls *.c | grep -vE "decode.c|decode_old.c|encode_old.c") -lm
+ 1357  ./encode ~/asn1c/full_output.ber 
+ 1358  gcc -I. -o encode $(ls *.c | grep -vE "decode.c|decode_old.c|encode_old.c") -lm
+ 1359  ./encode ~/asn1c/full_output.ber 
+ 1360  gcc -I. -o encode $(ls *.c | grep -vE "decode.c|decode_old.c|encode_old.c") -lm
+ 1361  ./encode ~/asn1c/full_output.ber 
+ 1362  gcc -I. -o encode $(ls *.c | grep -vE "decode.c|decode_old.c|encode_old.c") -lm
+ 1363  ./encode ~/asn1c/full_output.ber 
+ 1364  gcc -I. -o encode $(ls *.c | grep -vE "decode.c|decode_old.c|encode_old.c") -lm
+ 1365  ./encode ~/asn1c/full_output.ber 
+ 1366  gcc -I. -o encode $(ls *.c | grep -vE "decode.c|decode_old.c|encode_old.c") -lm
+ 1367  ./encode ~/asn1c/full_output.ber 
+ 1368  gcc -I. -o encode $(ls *.c | grep -vE "decode.c|decode_old.c|encode_old.c") -lm
+ 1369  ./encode ~/asn1c/full_output.ber 
+ 1370  gcc -I. -o encode $(ls *.c | grep -vE "decode.c|decode_old.c|encode_old.c") -lm
+ 1371  ./encode ~/asn1c/full_output.ber 
+ 1372  gcc -I. -o encode $(ls *.c | grep -vE "decode.c|decode_old.c|encode_old.c") -lm
+ 1373  ./encode ~/asn1c/full_output.ber 
+ 1374  gcc -I. -o encode $(ls *.c | grep -vE "decode.c|decode_old.c|encode_old.c") -lm
+ 1375  ./encode ~/asn1c/full_output.ber 
+ 1376  gcc -I. -o encode $(ls *.c | grep -vE "decode.c|decode_old.c|encode_old.c") -lm
+ 1377  ./encode ~/asn1c/full_output.ber 
+ 1378  gcc -I. -o encode $(ls *.c | grep -vE "decode.c|decode_old.c|encode_old.c") -lm
+ 1379  ./encode ~/asn1c/full_output.ber 
+ 1380  gcc -I. -o encode $(ls *.c | grep -vE "decode.c|decode_old.c|encode_old.c") -lm
+ 1381  ./encode ~/asn1c/full_output.ber 
+ 1382  ./decode ~/asn1c/full_output.ber 
+ 1383  gcc -I. -o encode $(ls *.c | grep -vE "decode.c|decode_old.c|encode_old.c") -lm
+ 1384  ./encode ~/asn1c/full_output.ber 
+ 1385  ./decode ~/asn1c/full_output.ber 
+ 1386  gcc -I. -o encode $(ls *.c | grep -vE "decode.c|decode_old.c|encode_old.c") -lm
+ 1387  ./encode ~/asn1c/full_output.ber 
+ 1388  gcc -I. -o encode $(ls *.c | grep -vE "decode.c|decode_old.c|encode_old.c") -lm
+ 1389  ./encode ~/asn1c/full_output.ber 
+ 1390  ./decode ~/asn1c/full_output.ber 
+ 1391  gcc -I. -o encode $(ls *.c | grep -vE "decode.c|decode_old.c|encode_old.c") -lm
+ 1392  ./encode ~/asn1c/full_output.ber 
+ 1393  ./decode ~/asn1c/full_output.ber 
+ 1394  gcc -I. -o encode $(ls *.c | grep -vE "decode.c|decode_old.c|encode_old.c") -lm
+ 1395  ./encode ~/asn1c/full_output.ber 
+ 1396  gcc -I. -o encode $(ls *.c | grep -vE "decode.c|decode_old.c|encode_old.c") -lm
+ 1397  ./encode ~/asn1c/full_output.ber 
+ 1398  ./decode ~/asn1c/full_output.ber 
+ 1399  gcc -I. -o encode $(ls *.c | grep -vE "decode.c|decode_old.c|encode_old.c") -lm
+ 1400  ./encode ~/asn1c/full_output.ber 
+ 1401  gcc -I. -o encode $(ls *.c | grep -vE "decode.c|decode_old.c|encode_old.c") -lm
+ 1402  ./encode ~/asn1c/full_output.ber 
+ 1403  gcc -I. -o encode $(ls *.c | grep -vE "decode.c|decode_old.c|encode_old.c") -lm
+ 1404  ./encode ~/asn1c/full_output.ber 
+ 1405  gcc -I. -o encode $(ls *.c | grep -vE "decode.c|decode_old.c|encode_old.c") -lm
+ 1406  ./encode ~/asn1c/full_output.ber 
+ 1407  gcc -I. -o encode $(ls *.c | grep -vE "decode.c|decode_old.c|encode_old.c") -lm
+ 1408  ./encode ~/asn1c/full_output.ber 
+ 1409  gcc -I. -o encode $(ls *.c | grep -vE "decode.c|decode_old.c|encode_old.c") -lm
+ 1410  ./encode ~/asn1c/full_output.ber 
+ 1411  gcc -I. -o encode $(ls *.c | grep -vE "decode.c|decode_old.c|encode_old.c") -lm
+ 1412  ./encode ~/asn1c/full_output.ber 
+ 1413  gcc -I. -o encode $(ls *.c | grep -vE "decode.c|decode_old.c|encode_old.c") -lm
+ 1414  ./encode ~/asn1c/full_output.ber 
+ 1415  gdb ./encode ~/asn1c/full_output.ber
+ 1416  gdb ./encode
+ 1417  gdb ./encode ~/asn1c/full_output.ber
+ 1418  gdb ./your_program
+ 1419  run
+ 1420  gdb ./encode
+ 1421  run
+ 1422  gdb ./encode
+ 1423  valgrind --track-origins=yes ./encode
+ 1424  sudo apt install valgrind
+ 1425  valgrind --track-origins=yes ./encode
+ 1426  gcc -I. -o encode $(ls *.c | grep -vE "decode.c|decode_old.c|encode_old.c") -lm
+ 1427  ./encode ~/asn1c/full_output.ber 
+ 1428  gcc -I. -o encode $(ls *.c | grep -vE "decode.c|decode_old.c|encode_old.c") -lm
+ 1429  ./encode ~/asn1c/full_output.ber 
+ 1430  gcc -I. -o encode $(ls *.c | grep -vE "decode.c|decode_old.c|encode_old.c") -lm
+ 1431  ./encode ~/asn1c/full_output.ber 
+ 1432  gcc -I. -o encode $(ls *.c | grep -vE "decode.c|decode_old.c|encode_old.c") -lm
+ 1433  ./encode ~/asn1c/full_output.ber 
+ 1434  ./decode ~/asn1c/full_output.ber 
+ 1435  gcc -I. -o encode $(ls *.c | grep -vE "decode.c|decode_old.c|encode_old.c") -lm
+ 1436  ./encode ~/asn1c/full_output.ber 
+ 1437  gcc -I. -o encode $(ls *.c | grep -vE "decode.c|decode_old.c|encode_old.c") -lm
+ 1438  ./encode ~/asn1c/full_output.ber 
+ 1439  gcc -I. -o encode $(ls *.c | grep -vE "decode.c|decode_old.c|encode_old.c") -lm
+ 1440  ./encode ~/asn1c/full_output.ber 
+ 1441  gcc -I. -o encode $(ls *.c | grep -vE "decode.c|decode_old.c|encode_old.c") -lm
+ 1442  ./encode ~/asn1c/full_output.ber 
+ 1443  gcc -I. -o encode $(ls *.c | grep -vE "decode.c|decode_old.c|encode_old.c") -lm
+ 1444  ./encode ~/asn1c/full_output.ber 
+ 1445  gcc -I. -o encode $(ls *.c | grep -vE "decode.c|decode_old.c|encode_old.c") -lm
+ 1446  ./encode ~/asn1c/full_output.ber 
+ 1447  gcc -I. -o encode $(ls *.c | grep -vE "decode.c|decode_old.c|encode_old.c") -lm
+ 1448  ./encode ~/asn1c/full_output.ber 
+ 1449  ./decode ~/asn1c/full_output.ber 
+ 1450  gcc -I. -o encode $(ls *.c | grep -vE "decode.c|decode_old.c|encode_old.c") -lm
+ 1451  ./encode ~/asn1c/full_output.ber 
+ 1452  ./decode ~/asn1c/full_output.ber 
+ 1453  gcc -I. -o encode $(ls *.c | grep -vE "decode.c|decode_old.c|encode_old.c") -lm
+ 1454  ./encode ~/asn1c/full_output.ber 
+ 1455  ./decode ~/asn1c/full_output.ber 
+ 1456  gcc -I. -o encode $(ls *.c | grep -vE "decode.c|decode_old.c|encode_old.c") -lm
+ 1457  ./encode ~/asn1c/full_output.ber 
+ 1458  gcc -I. -o encode $(ls *.c | grep -vE "decode.c|decode_old.c|encode_old.c") -lm
+ 1459  ./encode ~/asn1c/full_output.ber 
+ 1460  ./decode ~/asn1c/full_output.ber 
+ 1461  gcc -I. -o encode $(ls *.c | grep -vE "decode.c|decode_old.c|encode_old.c") -lm
+ 1462  ./encode ~/asn1c/full_output.ber 
+ 1463  gcc -I. -o encode $(ls *.c | grep -vE "decode.c|decode_old.c|encode_old.c") -lm
+ 1464  ./encode ~/asn1c/full_output.ber 
+ 1465  gcc -I. -o encode $(ls *.c | grep -vE "decode.c|decode_old.c|encode_old.c") -lm
+ 1466  ./encode ~/asn1c/full_output.ber 
+ 1467  gcc -I. -o encode $(ls *.c | grep -vE "decode.c|decode_old.c|encode_old.c") -lm
+ 1468  ./encode ~/asn1c/full_output.ber 
+ 1469  gcc -I. -o encode $(ls *.c | grep -vE "decode.c|decode_old.c|encode_old.c") -lm
+ 1470  ./encode ~/asn1c/full_output.ber 
+ 1471  gcc -I. -o encode $(ls *.c | grep -vE "decode.c|decode_old.c|encode_old.c") -lm
+ 1472  ./encode ~/asn1c/full_output.ber 
+ 1473  gcc -I. -o encode $(ls *.c | grep -vE "decode.c|decode_old.c|encode_old.c") -lm
+ 1474  ./encode ~/asn1c/full_output.ber 
+ 1475  gcc -I. -o encode $(ls *.c | grep -vE "decode.c|decode_old.c|encode_old.c") -lm
+ 1476  ./encode ~/asn1c/full_output.ber 
+ 1477  gcc -I. -o encode $(ls *.c | grep -vE "decode.c|decode_old.c|encode_old.c") -lm
+ 1478  ./encode ~/asn1c/full_output.ber 
+ 1479  gcc -I. -o encode $(ls *.c | grep -vE "decode.c|decode_old.c|encode_old.c") -lm
+ 1480  ./encode ~/asn1c/full_output.ber 
+ 1481  gcc -I. -o encode $(ls *.c | grep -vE "decode.c|decode_old.c|encode_old.c") -lm
+ 1482  ./encode ~/asn1c/full_output.ber 
+ 1483  gcc -I. -o encode $(ls *.c | grep -vE "decode.c|decode_old.c|encode_old.c") -lm
+ 1484  ./encode ~/asn1c/full_output.ber 
+ 1485  gcc -I. -o encode $(ls *.c | grep -vE "decode.c|decode_old.c|encode_old.c") -lm
+ 1486  ./encode ~/asn1c/full_output.ber 
+ 1487  gcc -I. -o encode $(ls *.c | grep -vE "decode.c|decode_old.c|encode_old.c") -lm
+ 1488  ./encode ~/asn1c/full_output.ber 
+ 1489  gcc -I. -o encode $(ls *.c | grep -vE "decode.c|decode_old.c|encode_old.c") -lm
+ 1490  ./encode ~/asn1c/full_output.ber 
+ 1491  gcc -I. -o encode $(ls *.c | grep -vE "decode.c|decode_old.c|encode_old.c") -lm
+ 1492  ./encode ~/asn1c/full_output.ber 
+ 1493  gcc -I. -o encode $(ls *.c | grep -vE "decode.c|decode_old.c|encode_old.c") -lm
+ 1494  ./encode ~/asn1c/full_output.ber 
+ 1495  gcc -I. -o encode $(ls *.c | grep -vE "decode.c|decode_old.c|encode_old.c") -lm
+ 1496  ./encode ~/asn1c/full_output.ber 
+ 1497  gcc -I. -o encode $(ls *.c | grep -vE "decode.c|decode_old.c|encode_old.c") -lm
+ 1498  ./encode ~/asn1c/full_output.ber 
+ 1499  gcc -I. -o encode $(ls *.c | grep -vE "decode.c|decode_old.c|encode_old.c") -lm
+ 1500  ./encode ~/asn1c/full_output.ber 
+ 1501  gcc -I. -o encode $(ls *.c | grep -vE "decode.c|decode_old.c|encode_old.c") -lm
+ 1502  ./encode ~/asn1c/full_output.ber 
+ 1503  gcc -I. -o encode $(ls *.c | grep -vE "decode.c|decode_old.c|encode_old.c") -lm
+ 1504  ./encode ~/asn1c/full_output.ber 
+ 1505  gcc -I. -o encode $(ls *.c | grep -vE "decode.c|decode_old.c|encode_old.c") -lm
+ 1506  ./encode ~/asn1c/full_output.ber 
+ 1507  gcc -I. -o encode $(ls *.c | grep -vE "decode.c|decode_old.c|encode_old.c") -lm
+ 1508  ./encode ~/asn1c/full_output.ber 
+ 1509  ./decode ~/asn1c/full_output.ber 
+ 1510  gcc -I. -o encode $(ls *.c | grep -vE "decode.c|decode_old.c|encode_old.c") -lm
+ 1511  ./encode ~/asn1c/full_output.ber 
+ 1512  ./decode ~/asn1c/full_output.ber 
+ 1513  gcc -I. -o encode $(ls *.c | grep -vE "decode.c|decode_old.c|encode_old.c") -lm
+ 1514  ./encode ~/asn1c/full_output.ber 
+ 1515  gcc -I. -o encode $(ls *.c | grep -vE "decode.c|decode_old.c|encode_old.c") -lm
+ 1516  ./encode ~/asn1c/full_output.ber 
+ 1517  gcc -I. -o encode $(ls *.c | grep -vE "decode.c|decode_old.c|encode_old.c") -lm
+ 1518  ./encode ~/asn1c/full_output.ber 
+ 1519  gcc -I. -o encode $(ls *.c | grep -vE "decode.c|decode_old.c|encode_old.c") -lm
+ 1520  ./encode ~/asn1c/full_output.ber 
+ 1521  gcc -I. -o encode $(ls *.c | grep -vE "decode.c|decode_old.c|encode_old.c") -lm
+ 1522  ./encode ~/asn1c/full_output.ber 
+ 1523  ./decode ~/asn1c/full_output.ber 
+ 1524  gcc -I. -o encode $(ls *.c | grep -vE "decode.c|decode_old.c|encode_old.c") -lm
+ 1525  ./encode ~/asn1c/full_output.ber 
+ 1526  ./decode ~/asn1c/full_output.ber 
+ 1527  sudo snap refresh
+ 1528  sudo apt update
+ 1529  clear
+ 1530  cd asn1c/temp/
+ 1531  gcc -I. -o encode $(ls *.c | grep -vE "decode.c|decode_old.c|encode_old.c") -lm
+ 1532  ./encode ~/asn1c/full_output.ber 
+ 1533  ./decode ~/asn1c/full_output.ber 
+ 1534  touch temp.c
+ 1535  gcc -I. -o temp $(ls *.c | grep -vE "decode.c|decode_old.c|encode_old.c|encode.c") -lm[B
+ 1536  ./temp 
+ 1537  gcc -I. -o temp $(ls *.c | grep -vE "decode.c|decode_old.c|encode_old.c|encode.c") -lm
+ 1538  ./temp 
+ 1539  gcc -I. -o temp $(ls *.c | grep -vE "decode.c|decode_old.c|encode_old.c|encode.c") -lm
+ 1540  ./temp 
+ 1541  gcc -I. -o temp $(ls *.c | grep -vE "decode.c|decode_old.c|encode_old.c|encode.c") -lm
+ 1542  ./temp 
+ 1543  gcc -I. -o encode $(ls *.c | grep -vE ") -lm
+ 1544  ./temp 
+ 1545  gcc -I. -o encode $(ls *.c | grep -vE "decode.c|decode_old.c|encode_old.c") -lm
+ 1546  ./encode ~/asn1c/full_output.ber 
+ 1547  ./decode ~/asn1c/full_output.ber 
+ 1548  gcc -I. -o encode $(ls *.c | grep -vE "decode.c|decode_old.c|encode_old.c") -lm
+ 1549  ./encode ~/asn1c/full_output.ber 
+ 1550  ./decode ~/asn1c/full_output.ber 
+ 1551  gcc -I. -o encode $(ls *.c | grep -vE "decode.c|decode_old.c|encode_old.c") -lm
+ 1552  ./encode ~/asn1c/full_output.ber 
+ 1553  ./decode ~/asn1c/full_output.ber 
+ 1554  gcc -I. -o encode $(ls *.c | grep -vE "decode.c|decode_old.c|encode_old.c") -lm
+ 1555  ./encode ~/asn1c/full_output.ber 
+ 1556  gcc -I. -o encode $(ls *.c | grep -vE "decode.c|decode_old.c|encode_old.c") -lm
+ 1557  ./encode ~/asn1c/full_output.ber 
+ 1558  gcc -I. -o encode $(ls *.c | grep -vE "decode.c|decode_old.c|encode_old.c") -lm
+ 1559  ./encode ~/asn1c/full_output.ber 
+ 1560  gcc -I. -o encode $(ls *.c | grep -vE "decode.c|decode_old.c|encode_old.c") -lm
+ 1561  ./encode ~/asn1c/full_output.ber 
+ 1562  gcc -I. -o encode $(ls *.c | grep -vE "decode.c|decode_old.c|encode_old.c") -lm
+ 1563  ./encode ~/asn1c/full_output.ber 
+ 1564  gcc -I. -o encode $(ls *.c | grep -vE "decode.c|decode_old.c|encode_old.c") -lm
+ 1565  ./encode ~/asn1c/full_output.ber 
+ 1566  gcc -I. -o encode $(ls *.c | grep -vE "decode.c|decode_old.c|encode_old.c") -lm
+ 1567  ./encode ~/asn1c/full_output.ber 
+ 1568  gcc -I. -o encode $(ls *.c | grep -vE "decode.c|decode_old.c|encode_old.c") -lm
+ 1569  ./encode ~/asn1c/full_output.ber 
+ 1570  gcc -I. -o encode $(ls *.c | grep -vE "decode.c|decode_old.c|encode_old.c") -lm
+ 1571  ./encode ~/asn1c/full_output.ber 
+ 1572  gcc -I. -o encode $(ls *.c | grep -vE "decode.c|decode_old.c|encode_old.c") -lm
+ 1573  ./encode ~/asn1c/full_output.ber 
+ 1574  gcc -I. -o encode $(ls *.c | grep -vE "decode.c|decode_old.c|encode_old.c") -lm
+ 1575  ./encode ~/asn1c/full_output.ber 
+ 1576  gcc -I. -o encode $(ls *.c | grep -vE "decode.c|decode_old.c|encode_old.c") -lm
+ 1577  ./encode ~/asn1c/full_output.ber 
+ 1578  gcc -I. -o encode $(ls *.c | grep -vE "decode.c|decode_old.c|encode_old.c") -lm
+ 1579  ./encode ~/asn1c/full_output.ber 
+ 1580  gcc -I. -o encode $(ls *.c | grep -vE "decode.c|decode_old.c|encode_old.c") -lm
+ 1581  ./encode ~/asn1c/full_output.ber 
+ 1582  gcc -I. -o encode $(ls *.c | grep -vE "decode.c|decode_old.c|encode_old.c") -lm
+ 1583  ./encode ~/asn1c/full_output.ber 
+ 1584  gcc -I. -o encode $(ls *.c | grep -vE "decode.c|decode_old.c|encode_old.c") -lm
+ 1585  ./encode ~/asn1c/full_output.ber 
+ 1586  gcc -I. -o encode $(ls *.c | grep -vE "decode.c|decode_old.c|encode_old.c") -lm
+ 1587  ./encode ~/asn1c/full_output.ber 
+ 1588  gcc -I. -o encode $(ls *.c | grep -vE "decode.c|decode_old.c|encode_old.c") -lm
+ 1589  ./encode ~/asn1c/full_output.ber 
+ 1590  gcc -I. -o encode $(ls *.c | grep -vE "decode.c|decode_old.c|encode_old.c") -lm
+ 1591  ./encode ~/asn1c/full_output.ber 
+ 1592  gcc -I. -o encode $(ls *.c | grep -vE "decode.c|decode_old.c|encode_old.c") -lm
+ 1593  ./encode ~/asn1c/full_output.ber 
+ 1594  gcc -I. -o encode $(ls *.c | grep -vE "decode.c|decode_old.c|encode_old.c") -lm
+ 1595  ./encode ~/asn1c/full_output.ber 
+ 1596  gcc -I. -o encode $(ls *.c | grep -vE "decode.c|decode_old.c|encode_old.c") -lm
+ 1597  ./encode ~/asn1c/full_output.ber 
+ 1598  gcc -I. -o encode $(ls *.c | grep -vE "decode.c|decode_old.c|encode_old.c") -lm
+ 1599  ./encode ~/asn1c/full_output.ber 
+ 1600  gcc -I. -o encode $(ls *.c | grep -vE "decode.c|decode_old.c|encode_old.c") -lm
+ 1601  ./encode ~/asn1c/full_output.ber 
+ 1602  gcc -I. -o encode $(ls *.c | grep -vE "decode.c|decode_old.c|encode_old.c") -lm
+ 1603  ./encode ~/asn1c/full_output.ber 
+ 1604  gcc -I. -o encode $(ls *.c | grep -vE "decode.c|decode_old.c|encode_old.c") -lm
+ 1605  ./encode ~/asn1c/full_output.ber 
+ 1606  gcc -I. -o encode $(ls *.c | grep -vE "decode.c|decode_old.c|encode_old.c") -lm
+ 1607  ./encode ~/asn1c/full_output.ber 
+ 1608  gcc -I. -o encode $(ls *.c | grep -vE "decode.c|decode_old.c|encode_old.c") -lm
+ 1609  ./encode ~/asn1c/full_output.ber 
+ 1610  gcc -I. -o encode $(ls *.c | grep -vE "decode.c|decode_old.c|encode_old.c") -lm
+ 1611  ./encode ~/asn1c/full_output.ber 
+ 1612  gcc -I. -o encode $(ls *.c | grep -vE "decode.c|decode_old.c|encode_old.c") -lm
+ 1613  ./encode ~/asn1c/full_output.ber 
+ 1614  gcc -I. -o encode $(ls *.c | grep -vE "decode.c|decode_old.c|encode_old.c") -lm
+ 1615  ./encode ~/asn1c/full_output.ber 
+ 1616  gcc -I. -o encode $(ls *.c | grep -vE "decode.c|decode_old.c|encode_old.c") -lm
+ 1617  ./encode ~/asn1c/full_output.ber 
+ 1618  gcc -I. -o encode $(ls *.c | grep -vE "decode.c|decode_old.c|encode_old.c") -lm
+ 1619  ./encode ~/asn1c/full_output.ber 
+ 1620  gcc -I. -o encode $(ls *.c | grep -vE "decode.c|decode_old.c|encode_old.c") -lm
+ 1621  ./encode ~/asn1c/full_output.ber 
+ 1622  gcc -I. -o encode $(ls *.c | grep -vE "decode.c|decode_old.c|encode_old.c") -lm
+ 1623  ./encode ~/asn1c/full_output.ber 
+ 1624  gcc -I. -o encode $(ls *.c | grep -vE "decode.c|decode_old.c|encode_old.c") -lm
+ 1625  ./encode ~/asn1c/full_output.ber 
+ 1626  gcc -I. -o encode $(ls *.c | grep -vE "decode.c|decode_old.c|encode_old.c") -lm
+ 1627  ./encode ~/asn1c/full_output.ber 
+ 1628  gcc -I. -o encode $(ls *.c | grep -vE "decode.c|decode_old.c|encode_old.c") -lm
+ 1629  ./encode ~/asn1c/full_output.ber 
+ 1630  ./decode ~/asn1c/full_output.ber 
+ 1631  gcc -I. -o encode $(ls *.c | grep -vE "decode.c|decode_old.c|encode_old.c") -lm
+ 1632  ./encode ~/asn1c/full_output.ber 
+ 1633  gcc -I. -o encode $(ls *.c | grep -vE "decode.c|decode_old.c|encode_old.c") -lm
+ 1634  ./encode ~/asn1c/full_output.ber 
+ 1635  gcc -I. -o encode $(ls *.c | grep -vE "decode.c|decode_old.c|encode_old.c") -lm
+ 1636  ./encode ~/asn1c/full_output.ber 
+ 1637  ./decode ~/asn1c/full_output.ber 
+ 1638  gcc -I. -o encode $(ls *.c | grep -vE "decode.c|decode_old.c|encode_old.c") -lm
+ 1639  ./encode ~/asn1c/full_output.ber 
+ 1640  ./decode ~/asn1c/full_output.ber 
+ 1641  gcc -I. -o encode $(ls *.c | grep -vE "decode.c|decode_old.c|encode_old.c") -lm
+ 1642  ./encode ~/asn1c/full_output.ber 
+ 1643  ./decode ~/asn1c/full_output.ber 
+ 1644  gcc -I. -o encode $(ls *.c | grep -vE "decode.c|decode_old.c|encode_old.c") -lm
+ 1645  ./encode ~/asn1c/full_output.ber 
+ 1646  ./decode ~/asn1c/full_output.ber 
+ 1647  gcc -I. -o encode $(ls *.c | grep -vE "decode.c|decode_old.c|encode_old.c") -lm
+ 1648  ./encode ~/asn1c/full_output.ber 
+ 1649  ./decode ~/asn1c/full_output.ber 
+ 1650  gcc -I. -o encode $(ls *.c | grep -vE "decode.c|decode_old.c|encode_old.c") -lm
+ 1651  ./encode ~/asn1c/full_output.ber 
+ 1652  ./decode ~/asn1c/full_output.ber 
+ 1653  gcc -I. -o encode $(ls *.c | grep -vE "decode.c|decode_old.c|encode_old.c") -lm
+ 1654  ./encode ~/asn1c/full_output.ber 
+ 1655  ./decode ~/asn1c/full_output.ber 
+ 1656  gcc -I. -o encode $(ls *.c | grep -vE "decode.c|decode_old.c|encode_old.c") -lm
+ 1657  ./encode ~/asn1c/full_output.ber 
+ 1658  gcc -I. -o encode $(ls *.c | grep -vE "decode.c|decode_old.c|encode_old.c") -lm
+ 1659  ./encode ~/asn1c/full_output.ber 
+ 1660  gcc -I. -o encode $(ls *.c | grep -vE "decode.c|decode_old.c|encode_old.c") -lm
+ 1661  ./encode ~/asn1c/full_output.ber 
+ 1662  gcc -I. -o encode $(ls *.c | grep -vE "decode.c|decode_old.c|encode_old.c") -lm
+ 1663  ./encode ~/asn1c/full_output.ber 
+ 1664  gcc -I. -o encode $(ls *.c | grep -vE "decode.c|decode_old.c|encode_old.c") -lm
+ 1665  ./encode ~/asn1c/full_output.ber 
+ 1666  ./decode ~/asn1c/full_output.ber 
+ 1667  gcc -I. -o encode $(ls *.c | grep -vE "decode.c|decode_old.c|encode_old.c") -lm
+ 1668  ./encode ~/asn1c/full_output.ber 
+ 1669  ./decode ~/asn1c/full_output.ber 
+ 1670  gcc -I. -o encode $(ls *.c | grep -vE "decode.c|decode_old.c|encode_old.c") -lm
+ 1671  ./encode ~/asn1c/full_output.ber 
+ 1672  ./decode ~/asn1c/full_output.ber 
+ 1673  gcc -I. -o encode $(ls *.c | grep -vE "decode.c|decode_old.c|encode_old.c") -lm
+ 1674  ./encode ~/asn1c/full_output.ber 
+ 1675  gcc -I. -o encode $(ls *.c | grep -vE "decode.c|decode_old.c|encode_old.c") -lm
+ 1676  ./encode ~/asn1c/full_output.ber 
+ 1677  gcc -I. -o encode $(ls *.c | grep -vE "decode.c|decode_old.c|encode_old.c") -lm
+ 1678  ./encode ~/asn1c/full_output.ber 
+ 1679  gcc -I. -o encode $(ls *.c | grep -vE "decode.c|decode_old.c|encode_old.c") -lm
+ 1680  ./encode ~/asn1c/full_output.ber 
+ 1681  asn1c --help
+ 1682  gcc -I. -o encode $(ls *.c | grep -vE "decode.c|decode_old.c|encode_old.c") -lm
+ 1683  ./encode ~/asn1c/full_output.ber 
+ 1684  gcc -I. -o encode $(ls *.c | grep -vE "decode.c|decode_old.c|encode_old.c") -lm
+ 1685  ./encode ~/asn1c/full_output.ber 
+ 1686  cd /usr/local/share/asn1c/
+ 1687  ls
+ 1688  nano asn_SEQUENCE_OF.h
+ 1689  rg --glob '*.h' "asn_sequence_add"
+ 1690  rg --glob '*.h' "asn_set_add"
+ 1691  nano asn_SET_OF.h
+ 1692  nano asn_SET_OF.c
+ 1693  cd asn1c/temp/
+ 1694  ./decode ~/asn1c/full_output.ber 
+ 1695  sudo snap refresh
+ 1696  sudo apt update
+ 1697  clear
+ 1698  cd ~/asn1c/temp/
+ 1699  ./decode ~/asn1c/full_output.ber 
+ 1700  gcc -I. -o encode $(ls *.c | grep -vE "decode.c|decode_old.c|encode_old.c") -lm
+ 1701  ./encode ~/asn1c/full_output.ber 
+ 1702  ./decode ~/asn1c/full_output.ber 
+ 1703  touch temp.c
+ 1704  rg --glob '*.h' "A_SEQUENCE_OF"
+ 1705  rg --glob '*.h' "list"
+ 1706  rg --glob '*.h' "asn_anonymous_set_"
+ 1707  rg --glob '*.h' "count"
+ 1708  gcc -I. -o decode $(ls *.c | grep -vE "encode.c|decode_old.c|encode_old.c") -lm
+ 1709  ./encode ~/asn1c/full_output.ber 
+ 1710  ./decode ~/asn1c/full_output.ber 
+ 1711  gcc -I. -o decode $(ls *.c | grep -vE "encode.c|decode_old.c|encode_old.c") -lm
+ 1712  ./decode ~/asn1c/full_output.ber 
+ 1713  gcc -I. -o decode $(ls *.c | grep -vE "encode.c|decode_old.c|encode_old.c") -lm
+ 1714  ./decode ~/asn1c/full_output.ber 
+ 1715  rg --glob "*.h" "asn_DEF_HighLevelCommunication"
+ 1716  gcc -I. -o decode $(ls *.c | grep -vE "encode.c|decode_old.c|encode_old.c") -lm
+ 1717  ./decode ~/asn1c/full_output.ber 
+ 1718  gcc -I. -o decode $(ls *.c | grep -vE "encode.c|decode_old.c|encode_old.c") -lm
+ 1719  ./decode ~/asn1c/full_output.ber 
+ 1720  gcc -I. -o decode $(ls *.c | grep -vE "encode.c|decode_old.c|encode_old.c") -lm
+ 1721  ./decode ~/asn1c/full_output.ber 
+ 1722  gcc -I. -o decode $(ls *.c | grep -vE "encode.c|decode_old.c|encode_old.c") -lm
+ 1723  ./decode ~/asn1c/full_output.ber 
+ 1724  rg --glob "*.h" "der_decode"
+ 1725  gcc -I. -o decode $(ls *.c | grep -vE "encode.c|decode_old.c|encode_old.c") -lm
+ 1726  ./decode ~/asn1c/full_output.ber 
+ 1727  gcc -I. -o decode $(ls *.c | grep -vE "encode.c|decode_old.c|encode_old.c") -lm
+ 1728  ./decode ~/asn1c/full_output.ber 
+ 1729  gcc -I. -o decode $(ls *.c | grep -vE "encode.c|decode_old.c|encode_old.c") -lm
+ 1730  ./decode ~/asn1c/full_output.ber 
+ 1731  ./decode ~/asn1c/esdp_encoded.dat 
+ 1732  gcc -I. -o decode $(ls *.c | grep -vE "encode.c|decode_old.c|encode_old.c") -lm
+ 1733  ./decode ~/asn1c/esdp_encoded.dat 
+ 1734  gcc -I. -o decode $(ls *.c | grep -vE "encode.c|decode_old.c|encode_old.c") -lm
+ 1735  ./decode ~/asn1c/esdp_encoded.dat 
+ 1736  gcc -I. -o decode $(ls *.c | grep -vE "encode.c|decode_old.c|encode_old.c") -lm
+ 1737  ./decode ~/asn1c/esdp_encoded.dat 
+ 1738  gcc -I. -o decode $(ls *.c | grep -vE "encode.c|decode_old.c|encode_old.c") -lm
+ 1739  ./decode ~/asn1c/esdp_encoded.dat 
+ 1740  gcc -I. -o decode $(ls *.c | grep -vE "encode.c|decode_old.c|encode_old.c") -lm
+ 1741  ./decode ~/asn1c/esdp_encoded.dat 
+ 1742  ./decode ~/asn1c/full_output.ber 
+ 1743  gcc -I. -o encode $(ls *.c | grep -vE "decode.c|decode_old.c|encode_old.c") -lm
+ 1744  ./encode ~/asn1c/full_output.ber 
+ 1745  gcc -I. -o encode $(ls *.c | grep -vE "decode.c|decode_old.c|encode_old.c") -lm
+ 1746  ./encode ~/asn1c/full_output.ber 
+ 1747  gcc -I. -o encode $(ls *.c | grep -vE "decode.c|decode_old.c|encode_old.c") -lm
+ 1748  ./encode ~/asn1c/full_output.ber 
+ 1749  gcc -I. -o encode $(ls *.c | grep -vE "decode.c|decode_old.c|encode_old.c") -lm
+ 1750  ./encode ~/asn1c/full_output.ber 
+ 1751  gcc -I. -o encode $(ls *.c | grep -vE "decode.c|decode_old.c|encode_old.c") -lm
+ 1752  ./encode ~/asn1c/full_output.ber 
+ 1753  gcc -I. -o encode $(ls *.c | grep -vE "decode.c|decode_old.c|encode_old.c") -lm
+ 1754  ./encode ~/asn1c/full_output.ber 
+ 1755  gcc -I. -o encode $(ls *.c | grep -vE "decode.c|decode_old.c|encode_old.c") -lm
+ 1756  ./encode ~/asn1c/full_output.ber 
+ 1757  gcc -I. -o encode $(ls *.c | grep -vE "decode.c|decode_old.c|encode_old.c") -lm
+ 1758  ./encode ~/asn1c/full_output.ber 
+ 1759  gcc -I. -o encode $(ls *.c | grep -vE "decode.c|decode_old.c|encode_old.c") -lm
+ 1760  ./encode ~/asn1c/full_output.ber 
+ 1761  gcc -I. -o encode $(ls *.c | grep -vE "decode.c|decode_old.c|encode_old.c") -lm
+ 1762  ./encode ~/asn1c/full_output.ber 
+ 1763  gcc -I. -o encode $(ls *.c | grep -vE "decode.c|decode_old.c|encode_old.c") -lm
+ 1764  ./encode ~/asn1c/full_output.ber 
+ 1765  gcc -I. -o encode $(ls *.c | grep -vE "decode.c|decode_old.c|encode_old.c") -lm
+ 1766  ./encode ~/asn1c/full_output.ber 
+ 1767  gcc -I. -o encode $(ls *.c | grep -vE "decode.c|decode_old.c|encode_old.c") -lm
+ 1768  ./encode ~/asn1c/full_output.ber 
+ 1769  ./decode ~/asn1c/full_output.ber 
+ 1770  gcc -I. -o encode $(ls *.c | grep -vE "decode.c|decode_old.c|encode_old.c") -lm
+ 1771  ./decode ~/asn1c/full_output.ber 
+ 1772  gcc -I. -o encode $(ls *.c | grep -vE "decode.c|decode_old.c|encode_old.c") -lm
+ 1773  ./encode ~/asn1c/full_output.ber 
+ 1774  gcc -I. -o encode $(ls *.c | grep -vE "decode.c|decode_old.c|encode_old.c") -lm
+ 1775  ./encode ~/asn1c/full_output.ber 
+ 1776  gcc -I. -o encode $(ls *.c | grep -vE "decode.c|decode_old.c|encode_old.c") -lm
+ 1777  ./encode ~/asn1c/full_output.ber 
+ 1778  gcc -I. -o encode $(ls *.c | grep -vE "decode.c|decode_old.c|encode_old.c") -lm
+ 1779  ./encode ~/asn1c/full_output.ber 
+ 1780  gcc -I. -o encode $(ls *.c | grep -vE "decode.c|decode_old.c|encode_old.c") -lm
+ 1781  ./encode ~/asn1c/full_output.ber 
+ 1782  ./decode ~/asn1c/full_output.ber 
+ 1783  gcc -I. -o decode $(ls *.c | grep -vE "encode.c|decode_old.c|encode_old.c") -lm
+ 1784  ./decode ~/asn1c/full_output.ber 
+ 1785  gcc -I. -o decode $(ls *.c | grep -vE "encode.c|decode_old.c|encode_old.c") -lm
+ 1786  gcc -I. -o encode $(ls *.c | grep -vE "decode.c|decode_old.c|encode_old.c") -lm
+ 1787  ./encode ~/asn1c/full_output.ber 
+ 1788  ./decode ~/asn1c/full_output.ber 
+ 1789  gcc -I. -o decode $(ls *.c | grep -vE "encode.c|decode_old.c|encode_old.c") -lm
+ 1790  ./decode ~/asn1c/full_output.ber 
+ 1791  gcc -I. -o encode $(ls *.c | grep -vE "decode.c|decode_old.c|encode_old.c") -lm
+ 1792  ./encode ~/asn1c/full_output.ber 
+ 1793  ./decode ~/asn1c/full_output.ber 
+ 1794  gcc -I. -o encode $(ls *.c | grep -vE "decode.c|decode_old.c|encode_old.c") -lm
+ 1795  ./encode ~/asn1c/full_output.ber 
+ 1796  ./decode ~/asn1c/full_output.ber 
+ 1797  gcc -I. -o encode $(ls *.c | grep -vE "decode.c|decode_old.c|encode_old.c") -lm
+ 1798  ./encode ~/asn1c/full_output.ber 
+ 1799  gcc -I. -o encode $(ls *.c | grep -vE "decode.c|decode_old.c|encode_old.c") -lm
+ 1800  ./encode ~/asn1c/full_output.ber 
+ 1801  gcc -I. -o encode $(ls *.c | grep -vE "decode.c|decode_old.c|encode_old.c") -lm
+ 1802  ./encode ~/asn1c/full_output.ber 
+ 1803  ./decode ~/asn1c/full_output.ber 
+ 1804  sudo snap refresh
+ 1805  sudo apt update
+ 1806  clear
+ 1807  gcc -I. -o encode $(ls *.c | grep -vE "decode.c|decode_old.c|encode_old.c") -lm
+ 1808  cd asn1c/temp/
+ 1809  gcc -I. -o encode $(ls *.c | grep -vE "decode.c|decode_old.c|encode_old.c") -lm
+ 1810  ./encode ~/asn1c/full_output.ber 
+ 1811  gcc -I. -o encode $(ls *.c | grep -vE "decode.c|decode_old.c|encode_old.c") -lm
+ 1812  ./encode ~/asn1c/full_output.ber 
+ 1813  gcc -I. -o encode $(ls *.c | grep -vE "decode.c|decode_old.c|encode_old.c") -lm
+ 1814  ./encode ~/asn1c/full_output.ber 
+ 1815  ./decode ~/asn1c/full_output.ber 
+ 1816  gcc -I. -o encode $(ls *.c | grep -vE "decode.c|decode_old.c|encode_old.c") -lm
+ 1817  ./encode ~/asn1c/full_output.ber 
+ 1818  gcc -I. -o decode $(ls *.c | grep -vE "encode.c|decode_old.c|encode_old.c") -lm
+ 1819  ./decode ~/asn1c/full_output.ber 
+ 1820  gcc -I. -o encode $(ls *.c | grep -vE "decode.c|decode_old.c|encode_old.c") -lm
+ 1821  ./encode ~/asn1c/full_output.ber 
+ 1822  ./decode ~/asn1c/full_output.ber 
+ 1823  gcc -I. -o encode $(ls *.c | grep -vE "decode.c|decode_old.c|encode_old.c") -lm
+ 1824  ./encode ~/asn1c/full_output.ber 
+ 1825  gcc -I. -o encode $(ls *.c | grep -vE "decode.c|decode_old.c|encode_old.c") -lm
+ 1826  ./encode ~/asn1c/full_output.ber 
+ 1827  gcc -I. -o decode $(ls *.c | grep -vE "encode.c|decode_old.c|encode_old.c") -lm
+ 1828  ./decode ~/asn1c/full_output.ber 
+ 1829  gcc -I. -o decode $(ls *.c | grep -vE "encode.c|decode_old.c|encode_old.c") -lm
+ 1830  ./decode ~/asn1c/full_output.ber 
+ 1831  gcc -I. -o decode $(ls *.c | grep -vE "encode.c|decode_old.c|encode_old.c") -lm
+ 1832  ./decode ~/asn1c/full_output.ber 
+ 1833  gcc -I. -o decode $(ls *.c | grep -vE "encode.c|decode_old.c|encode_old.c") -lm
+ 1834  ./decode ~/asn1c/full_output.ber 
+ 1835  gcc -I. -o decode $(ls *.c | grep -vE "encode.c|decode_old.c|encode_old.c") -lm
+ 1836  ./decode ~/asn1c/full_output.ber 
+ 1837  gcc -I. -o decode $(ls *.c | grep -vE "encode.c|decode_old.c|encode_old.c") -lm
+ 1838  ./decode ~/asn1c/full_output.ber 
+ 1839  gcc -I. -o encode $(ls *.c | grep -vE "decode.c|decode_old.c|encode_old.c") -lm
+ 1840  ./encode ~/asn1c/full_output.ber 
+ 1841  gcc -I. -o encode $(ls *.c | grep -vE "decode.c|decode_old.c|encode_old.c") -lm
+ 1842  ./encode ~/asn1c/full_output.ber 
+ 1843  ./decode ~/asn1c/full_output.ber 
+ 1844  gcc -I. -o decode $(ls *.c | grep -vE "encode.c|decode_old.c|encode_old.c") -lm
+ 1845  ./decode ~/asn1c/full_output.ber 
+ 1846  gcc -I. -o decode $(ls *.c | grep -vE "encode.c|decode_old.c|encode_old.c") -lm
+ 1847  ./decode ~/asn1c/full_output.ber 
+ 1848  gcc -I. -o decode $(ls *.c | grep -vE "encode.c|decode_old.c|encode_old.c") -lm
+ 1849  ./decode ~/asn1c/full_output.ber 
+ 1850  ./decode ~/asn1c/esdp_encoded.dat 
+ 1851  gcc -I. -o decode $(ls *.c | grep -vE "encode.c|decode_old.c|encode_old.c") -lm
+ 1852  ./decode ~/asn1c/full_output.ber 
+ 1853  gcc -I. -o encode $(ls *.c | grep -vE "decode.c|decode_old.c|encode_old.c") -lm
+ 1854  ./encode ~/asn1c/full_output.ber 
+ 1855  ./decode ~/asn1c/full_output.ber 
+ 1856  gcc -I. -o decode $(ls *.c | grep -vE "encode.c|decode_old.c|encode_old.c") -lm
+ 1857  ./decode ~/asn1c/full_output.ber 
+ 1858  sudo snap refresh
+ 1859  sudo apt update
+ 1860  clear
+ 1861  sudo snap refresh
+ 1862  sudo apt update
+ 1863  clear
+ 1864  sudo snap refresh
+ 1865  sudo apt update
+ 1866  history
+ 1867  clear
+ 1868  sudo snap refresh
+ 1869  sudo apt update
+ 1870  clear && sudo shutdown now
+ 1871  sudo snap refresh
+ 1872  sudo apt update
+ 1873  apt list --upgradable
+ 1874  sudo apt-get upgrade -y linux-generic-hwe-22.04
+ 1875  sudo apt update
+ 1876  clear
+ 1877  sudo snap refresh
+ 1878  sudo apt update
+ 1879  clear
+ 1880  cd asn1c/temp/
+ 1881  ls
+ 1882  cd ..
+ 1883  cd temp
+ 1884  cd playground/
+ 1885  clear
+ 1886  ./encode 
+ 1887  ./decode ~/asn1c/encode_output.ber 
+ 1888  ./decode ~/asn1c/full_output.ber 
+ 1889  ./encode ~/asn1c/full_output2.ber
+ 1890  ./decode ~/asn1c/full_output02.ber 
+ 1891  ./decode ~/asn1c/full_output2.ber 
+ 1892  sudo snap refresh
+ 1893  sudo apt update
+ 1894  apt list --upgradable
+ 1895  sudo apt-get upgrade -y bind9-libs
+ 1896  apt list --upgradable
+ 1897  sudo apt update
+ 1898  clear
+ 1899  cd asn1c/playground/
+ 1900  ./decode ~/asn1c/full_output.ber 
+ 1901  ./decode ~/asn1c/esdp_encoded.dat 
+ 1902  sudo snap refresh
+ 1903  sudo apt update
+ 1904  clear
+ 1905  gcc -I. -o encode $(ls *.c | grep -vE "decode.c|decode_old.c|encode_old.c") -lm
+ 1906  cd asn1c/playground/
+ 1907  gcc -I. -o encode $(ls *.c | grep -vE "decode.c|decode_old.c|encode_old.c") -lm
+ 1908  ./encode ~/asn1c/full_output02.ber 
+ 1909  gcc -I. -o decode $(ls *.c | grep -vE "encode.c|decode_old.c|encode_old.c") -lm
+ 1910  ./decode ~/asn1c/full_output.ber 
+ 1911  gcc -I. -o decode $(ls *.c | grep -vE "encode.c|decode_old.c|encode_old.c") -lm
+ 1912  ./decode ~/asn1c/full_output.ber 
+ 1913  gcc -I. -o decode $(ls *.c | grep -vE "encode.c|decode_old.c|encode_old.c") -lm
+ 1914  ./decode ~/asn1c/full_output.ber 
+ 1915  gcc -I. -o decode $(ls *.c | grep -vE "encode.c|decode_old.c|encode_old.c") -lm
+ 1916  ./decode ~/asn1c/full_output.ber 
+ 1917  ./decode ~/asn1c/full_output02.ber 
+ 1918  gcc -I. -o decode $(ls *.c | grep -vE "encode.c|decode_old.c|encode_old.c") -lm
+ 1919  ./decode ~/asn1c/full_output.ber 
+ 1920  gcc -I. -o decode $(ls *.c | grep -vE "encode.c|decode_old.c|encode_old.c") -lm
+ 1921  ./decode ~/asn1c/full_output.ber 
+ 1922  gcc -I. -o decode $(ls *.c | grep -vE "encode.c|decode_old.c|encode_old.c") -lm
+ 1923  ./decode ~/asn1c/full_output.ber 
+ 1924  gcc -I. -o decode $(ls *.c | grep -vE "encode.c|decode_old.c|encode_old.c") -lm
+ 1925  ./decode ~/asn1c/full_output.ber 
+ 1926  gcc -I. -o decode $(ls *.c | grep -vE "encode.c|decode_old.c|encode_old.c") -lm
+ 1927  ./decode ~/asn1c/full_output.ber 
+ 1928  gcc -I. -o decode $(ls *.c | grep -vE "encode.c|decode_old.c|encode_old.c") -lm
+ 1929  ./decode ~/asn1c/full_output.ber 
+ 1930  gcc -I. -o decode $(ls *.c | grep -vE "encode.c|decode_old.c|encode_old.c") -lm
+ 1931  ./decode ~/asn1c/full_output.ber 
+ 1932  ./decode ~/asn1c/full_output02.ber 
+ 1933  ./decode ~/asn1c/full_output.ber 
+ 1934  gcc -I. -o decode $(ls *.c | grep -vE "encode.c|decode_old.c|encode_old.c") -lm
+ 1935  ./decode ~/asn1c/full_output02.ber 
+ 1936  gcc -I. -o decode $(ls *.c | grep -vE "encode.c|decode_old.c|encode_old.c") -lm
+ 1937  ./decode ~/asn1c/full_output02.ber 
+ 1938  gcc -I. -o decode $(ls *.c | grep -vE "encode.c|decode_old.c|encode_old.c") -lm
+ 1939  ./decode ~/asn1c/full_output02.ber 
+ 1940  gcc -I. -o encode $(ls *.c | grep -vE "decode.c|decode_old.c|encode_old.c") -lm
+ 1941  ./encode ~/asn1c/full_output02.ber 
+ 1942  gcc -I. -o encode $(ls *.c | grep -vE "decode.c|decode_old.c|encode_old.c") -lm
+ 1943  ./encode ~/asn1c/full_output02.ber 
+ 1944  gcc -I. -o encode $(ls *.c | grep -vE "decode.c|decode_old.c|encode_old.c") -lm
+ 1945  ./encode ~/asn1c/full_output02.ber 
+ 1946  gcc -I. -o encode $(ls *.c | grep -vE "decode.c|decode_old.c|encode_old.c") -lm
+ 1947  ./encode ~/asn1c/full_output02.ber 
+ 1948  gcc -I. -o encode $(ls *.c | grep -vE "decode.c|decode_old.c|encode_old.c") -lm
+ 1949  ./encode ~/asn1c/full_output02.ber 
+ 1950  gcc -I. -o encode $(ls *.c | grep -vE "decode.c|decode_old.c|encode_old.c") -lm
+ 1951  ./encode ~/asn1c/full_output02.ber 
+ 1952  gcc -I. -o encode $(ls *.c | grep -vE "decode.c|decode_old.c|encode_old.c") -lm
+ 1953  ./encode ~/asn1c/full_output02.ber 
+ 1954  history | grep "rg"
+ 1955  gcc -I. -o encode $(ls *.c | grep -vE "decode.c|decode_old.c|encode_old.c") -lm
+ 1956  ./encode ~/asn1c/full_output02.ber 
+ 1957  gcc -I. -o encode $(ls *.c | grep -vE "decode.c|decode_old.c|encode_old.c") -lm
+ 1958  ./encode ~/asn1c/full_output02.ber 
+ 1959  gcc -I. -o encode $(ls *.c | grep -vE "decode.c|decode_old.c|encode_old.c") -lm
+ 1960  ./encode ~/asn1c/full_output02.ber 
+ 1961  gcc -I. -o encode $(ls *.c | grep -vE "decode.c|decode_old.c|encode_old.c") -lm
+ 1962  ./encode ~/asn1c/full_output02.ber 
+ 1963  gcc -I. -o decode $(ls *.c | grep -vE "encode.c|decode_old.c|encode_old.c") -lm
+ 1964  ./decode ~/asn1c/full_output02.ber 
+ 1965  gcc -I. -o encode $(ls *.c | grep -vE "decode.c|decode_old.c|encode_old.c") -lm
+ 1966  ./encode ~/asn1c/full_output02.ber 
+ 1967  gcc -I. -o decode $(ls *.c | grep -vE "encode.c|decode_old.c|encode_old.c") -lm
+ 1968  ./decode ~/asn1c/full_output02.ber 
+ 1969  gcc -I. -o decode $(ls *.c | grep -vE "encode.c|decode_old.c|encode_old.c") -lm
+ 1970  ./decode ~/asn1c/full_output02.ber 
+ 1971  ./encode ~/asn1c/ASN1C_full_output.ber 
+ 1972  ./decode ~/asn1c/ASN1C_full_output.ber 
+ 1973  gcc -I. -o encode $(ls *.c | grep -vE "decode.c|decode_old.c|encode_old.c") -lm
+ 1974  ./encode ~/asn1c/ASN1C_full_output.ber 
+ 1975  gcc -I. -o decode $(ls *.c | grep -vE "encode.c|decode_old.c|encode_old.c") -lm
+ 1976  ./decode ~/asn1c/ASN1C_full_output.ber 
+ 1977  gcc -I. -o encode $(ls *.c | grep -vE "decode.c|decode_old.c|encode_old.c") -lm
+ 1978  ./encode ~/asn1c/ASN1C_full_output.ber 
+ 1979  gcc -I. -o decode $(ls *.c | grep -vE "encode.c|decode_old.c|encode_old.c") -lm
+ 1980  ./decode ~/asn1c/ASN1C_full_output.ber 
+ 1981  cd asn1c/playground/
+ 1982  ./encode ~/asn1c/temp.ber
+ 1983  ./decode ~/asn1c/temp.ber 
+ 1984  ./decode ~/asn1c/python_output.dat 
+ 1985  gcc -I. -o encode $(ls *.c | grep -vE "decode.c|decode_old.c|encode_old.c") -lm
+ 1986  ./encode ~/asn1c/temp.ber 
+ 1987  ./decode ~/asn1c/temp.ber 
+ 1988  gcc -I. -o encode $(ls *.c | grep -vE "decode.c|decode_old.c|encode_old.c") -lm
+ 1989  ./encode ~/asn1c/temp.ber 
+ 1990  ./decode ~/asn1c/temp.ber 
+ 1991  sudo snap refresh
+ 1992  sudo apt update
+ 1993  clear
+ 1994  cd ~/asn1c/playground/
+ 1995  ./decode ~/checkout_esdp/sdp-port-workspace/Josev/iso15118/evcc/asn1/esdp_encoded.dat 
+ 1996  cd
+ 1997  cd checkout_esdp/sdp-port-workspace/everest-core/modules/EvseV2G/
+ 1998  ls
+ 1999  clea
+ 2000  clear
+ 2001  sudo snap refresh
+ 2002  sudo apt update
+ 2003  sudo apt updat
+ 2004  sudo apt update
+ 2005  apt list --upgradable
+ 2006  sudo apt-get upgrade -y libpam0g
+ 2007  apt list --upgradable
+ 2008  sudo apt-get upgrade -y libmbim-proxy
+ 2009  apt list --upgradable
+ 2010  clear
+ 2011  docker network create --driver bridge --ipv6 --subnet fd00::/80 infranet_network --attachable
+ 2012  cd checkout_esdp/sdp-port-workspace/everest-core/
+ 2013  docker ps
+ 2014  docker images
+ 2015  docker run -d --name mqtt-server
+ 2016  docker run -d --name mqtt-server --network infranet_network
+ 2017  docker run -d --name mqtt-server --network infranet_network -p 1883:1883 -p 9001:9001 ghcr.io/everest/everest-dev-environment/mosquitto:docker-images-v0.1.0
+ 2018  ssh-add
+ 2019  docker run -d --name mqtt-server --network infranet_network -p 1883:1883 -p 9001:9001 ghcr.io/everest/everest-dev-environment/mosquitto:docker-images-v0.1.0
+ 2020  history -> ~/temp/temp.text
+ 2021  history -> ~/temp.text
+ 2022  history -> ~temp.text
+ 2023  history > ~temp.text
