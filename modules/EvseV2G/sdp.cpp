@@ -267,16 +267,7 @@ int encode_ESDPRes_Extensions(uint8_t* buffer_esdp, int offset, struct sockaddr_
     free(ip_buffer);
 
     /* Placeholder switch block. Can be used to selectively encode HLC Extension */
-    /* switch (security) {
-        case SDP_SECURITY_TLS:
-            sec_profile01 -> securityProfile = SecurityProfile_tls12_server;
-        case SDP_SECURITY_NONE:
-            sec_profile01 -> securityProfile = SecurityProfile_tcpOnly;
-            break;
-        default:
-            dlog(DLOG_LEVEL_ERROR, "Unknown Security. Unable to encode correct security into ESDPResponse's HLC extension");
-            break:
-    } */
+
 
     /* ExtensionID 4 - High Level Communication extension */
     /* Using a placeholder list of all possible combinations for now. Use the switch block above to selectively encode supported HLC Extensions.
@@ -288,8 +279,21 @@ int encode_ESDPRes_Extensions(uint8_t* buffer_esdp, int offset, struct sockaddr_
     /* First HLC Tuple - For DIN 70121:2014 (TCP with EIM with DC) */
     HighLevelCommunicationTuple_t *hlc_tuple01 = (HighLevelCommunicationTuple_t *)calloc(1, sizeof(HighLevelCommunicationTuple_t));
     hlc_tuple01 -> hlcProtocol = HLCProtocol_din_spec_70121_2014;
+
     SecurityProfileTuple_t *sec_profile01 = (SecurityProfileTuple_t *)calloc(1, sizeof(SecurityProfileTuple_t));
     sec_profile01 -> securityProfile = SecurityProfile_tcpOnly;
+    switch (security) {
+        case SDP_SECURITY_TLS:
+            sec_profile01 -> securityProfile = SecurityProfile_tls12_server;
+            break;
+        case SDP_SECURITY_NONE:
+            sec_profile01 -> securityProfile = SecurityProfile_tcpOnly;
+            break;
+        default:
+            dlog(DLOG_LEVEL_ERROR, "Unknown Security. Unable to encode correct security into ESDPResponse's HLC extension");
+            break:
+    }
+    
     AuthorizationMethod_t *auth01 = (AuthorizationMethod_t *)calloc(1, sizeof(AuthorizationMethod_t));
     *auth01 = AuthorizationMethod_eim;
     EnergyTransferMode_t *mode01 = (EnergyTransferMode_t *)calloc(1, sizeof(EnergyTransferMode_t));
@@ -328,13 +332,17 @@ int encode_ESDPRes_Extensions(uint8_t* buffer_esdp, int offset, struct sockaddr_
     ASN_SEQUENCE_ADD(&sec_profile02_02 -> authorizationMethod.list, auth02_02_01);
     ASN_SEQUENCE_ADD(&sec_profile02_02 -> authorizationMethod.list, auth02_02_02);
     ASN_SEQUENCE_ADD(&sec_profile02_02 -> energyTransferMode.list, mode02_02_01);
-    ASN_SEQUENCE_ADD(&sec_profile02_02 -> energyTransferMode.list, mode02_02_02);  
+    ASN_SEQUENCE_ADD(&sec_profile02_02 -> energyTransferMode.list, mode02_02_02);
     ASN_SEQUENCE_ADD(&hlc_tuple02 -> securityProfileTuple.list, sec_profile02_01);
-    ASN_SEQUENCE_ADD(&hlc_tuple02 -> securityProfileTuple.list, sec_profile02_02);
+    if(security == SDP_SECURITY_TLS)
+    {
+        ASN_SEQUENCE_ADD(&hlc_tuple02 -> securityProfileTuple.list, sec_profile02_02);
+    }
+    
     ASN_SEQUENCE_ADD(&hlc -> list, hlc_tuple02);
 
     /* Third HLC Tuple - For ISO 15118-20:2022 (TCP with EIM with dc & dc-bpt & ac & ac-bpt) */
-    HighLevelCommunicationTuple_t *hlc_tuple03 = (HighLevelCommunicationTuple_t *)calloc(1, sizeof(HighLevelCommunicationTuple_t));
+    /* HighLevelCommunicationTuple_t *hlc_tuple03 = (HighLevelCommunicationTuple_t *)calloc(1, sizeof(HighLevelCommunicationTuple_t));
     hlc_tuple03 -> hlcProtocol = HLCProtocol_iso_15118_20_2022;
     SecurityProfileTuple_t *sec_profile03_01 = (SecurityProfileTuple_t *)calloc(1, sizeof(SecurityProfileTuple_t));
     sec_profile03_01 -> securityProfile = SecurityProfile_tcpOnly;
@@ -353,9 +361,11 @@ int encode_ESDPRes_Extensions(uint8_t* buffer_esdp, int offset, struct sockaddr_
     ASN_SEQUENCE_ADD(&sec_profile03_01 -> energyTransferMode.list, mode03_01_02);
     ASN_SEQUENCE_ADD(&sec_profile03_01 -> energyTransferMode.list, mode03_01_03);
     ASN_SEQUENCE_ADD(&sec_profile03_01 -> energyTransferMode.list, mode03_01_04);
+    */
+
 
     /* and (TLS12_server with EIM & PNC_2 with dc & dc-bpt & ac & ac-bpt) */
-    SecurityProfileTuple_t *sec_profile03_02 = (SecurityProfileTuple_t *)calloc(1, sizeof(SecurityProfileTuple_t));
+    /* SecurityProfileTuple_t *sec_profile03_02 = (SecurityProfileTuple_t *)calloc(1, sizeof(SecurityProfileTuple_t));
     sec_profile03_02 -> securityProfile = SecurityProfile_tls12_server;
     AuthorizationMethod_t *auth03_02_01 = (AuthorizationMethod_t *)calloc(1, sizeof(AuthorizationMethod_t));
     *auth03_02_01 = AuthorizationMethod_eim;
@@ -375,9 +385,10 @@ int encode_ESDPRes_Extensions(uint8_t* buffer_esdp, int offset, struct sockaddr_
     ASN_SEQUENCE_ADD(&sec_profile03_02 -> energyTransferMode.list, mode03_02_02);
     ASN_SEQUENCE_ADD(&sec_profile03_02 -> energyTransferMode.list, mode03_02_03);
     ASN_SEQUENCE_ADD(&sec_profile03_02 -> energyTransferMode.list, mode03_02_04);
+    */
     
     /* and (TLS13_mutual with EIM & PNC_2 & PNC_20 with dc & dc-bpt & ac & ac-bpt) */
-    SecurityProfileTuple_t *sec_profile03_03 = (SecurityProfileTuple_t *)calloc(1, sizeof(SecurityProfileTuple_t));
+    /* SecurityProfileTuple_t *sec_profile03_03 = (SecurityProfileTuple_t *)calloc(1, sizeof(SecurityProfileTuple_t));
     sec_profile03_03 -> securityProfile = SecurityProfile_tls13_mutual;
     AuthorizationMethod_t *auth03_03_01 = (AuthorizationMethod_t *)calloc(1, sizeof(AuthorizationMethod_t));
     *auth03_03_01 = AuthorizationMethod_eim;
@@ -403,7 +414,8 @@ int encode_ESDPRes_Extensions(uint8_t* buffer_esdp, int offset, struct sockaddr_
     ASN_SEQUENCE_ADD(&hlc_tuple03 -> securityProfileTuple.list, sec_profile03_01);
     ASN_SEQUENCE_ADD(&hlc_tuple03 -> securityProfileTuple.list, sec_profile03_02);
     ASN_SEQUENCE_ADD(&hlc_tuple03 -> securityProfileTuple.list, sec_profile03_03);
-    ASN_SEQUENCE_ADD(&hlc -> list, hlc_tuple03);
+    ASN_SEQUENCE_ADD(&hlc -> list, hlc_tuple03); 
+    */
     
     /* Add hlc sequence of hlc_tuples to extensions -> extensionValue and standardized extension */
     uint8_t *hlc_buffer = (uint8_t *)calloc(256, sizeof(uint8_t));
@@ -824,10 +836,10 @@ int decode_standardized_extensions(const StandardizedExtensions_t *extensions, s
                                 SecurityProfileTuple_t *sp_tuple = tuple -> securityProfileTuple.list.array[jj];
                                 switch(sp_tuple -> securityProfile) {
                                     case SecurityProfile_tcpOnly:
-                                        //sdp_query->security_requested = SDP_SECURITY_NONE;
+                                        sdp_query->security_requested = SDP_SECURITY_NONE;
                                         break;
                                     case SecurityProfile_tls12_server:
-                                        //sdp_query->security_requested = SDP_SECURITY_TLS;
+                                        sdp_query->security_requested = SDP_SECURITY_TLS;
                                         break;
                                     case SecurityProfile_tls13_mutual:
                                         break;
@@ -969,10 +981,6 @@ int decode_standardized_extensions(const StandardizedExtensions_t *extensions, s
     /* Since Transport protocol is not included in HLC Extension under ESDP Standardized extensions,
         this is currently being hardcoded*/
     sdp_query->proto_requested = SDP_TRANSPORT_PROTOCOL_TCP;
-    
-    /* Currently hardcoding security to No-TLS. This line can be removed when this value starts getting 
-        set from decoded HLC Extension */
-    sdp_query->security_requested = SDP_SECURITY_NONE;
 
     return 0;
 }
