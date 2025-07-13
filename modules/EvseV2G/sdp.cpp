@@ -279,21 +279,8 @@ int encode_ESDPRes_Extensions(uint8_t* buffer_esdp, int offset, struct sockaddr_
     /* First HLC Tuple - For DIN 70121:2014 (TCP with EIM with DC) */
     HighLevelCommunicationTuple_t *hlc_tuple01 = (HighLevelCommunicationTuple_t *)calloc(1, sizeof(HighLevelCommunicationTuple_t));
     hlc_tuple01 -> hlcProtocol = HLCProtocol_din_spec_70121_2014;
-
     SecurityProfileTuple_t *sec_profile01 = (SecurityProfileTuple_t *)calloc(1, sizeof(SecurityProfileTuple_t));
     sec_profile01 -> securityProfile = SecurityProfile_tcpOnly;
-    switch (security) {
-        case SDP_SECURITY_TLS:
-            sec_profile01 -> securityProfile = SecurityProfile_tls12_server;
-            break;
-        case SDP_SECURITY_NONE:
-            sec_profile01 -> securityProfile = SecurityProfile_tcpOnly;
-            break;
-        default:
-            dlog(DLOG_LEVEL_ERROR, "Unknown Security. Unable to encode correct security into ESDPResponse's HLC extension");
-            break:
-    }
-    
     AuthorizationMethod_t *auth01 = (AuthorizationMethod_t *)calloc(1, sizeof(AuthorizationMethod_t));
     *auth01 = AuthorizationMethod_eim;
     EnergyTransferMode_t *mode01 = (EnergyTransferMode_t *)calloc(1, sizeof(EnergyTransferMode_t));
