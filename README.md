@@ -2,6 +2,7 @@
 This fork of the everest-core repository adds a prototype of the Extensible Supply Equipment Communication Controller (SECC) Discovery Protocol (ESDP) implemented based on a draft of the ISO 15118-202 standard. This is achieved through additions and modifications to the EvseV2G module. The implementation provides a demonstration of the ESDP messages, encoding and decoding but does not include a full integration within the Everest framework. Much of the information being sent over ESDP in this implementation is set statically for the sake of demonstrating the protocol itself.
 
 NREL Software Record: SWR-25-56 
+
 ISO 15118-202: https://www.iso.org/standard/89759.html
 
 # everest-core
